@@ -1,0 +1,26 @@
+{
+  "name": "notus",
+  "version": "0.1.0",
+  "description": "Yet another pop-up notification library for the web, strictly without jQuery.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kushalpandya/notus.git"
+  },
+  "keywords": [
+    "js",
+    "notify",
+    "popup",
+    "toast",
+    "snackbar"
+  ],
+  "author": "Kushal Pandya <kushalspandya@gmail.com> (https://doublslash.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kushalpandya/notus/issues"
+  },
+  "homepage": "https://github.com/kushalpandya/notus#readme"
+}
