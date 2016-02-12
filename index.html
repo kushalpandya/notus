@@ -2,9 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Notus - Better Popup Notifications</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="src/notus.css" media="screen" title="Notus Stylesheet" charset="utf-8">
+    <script src="src/notus.js" charset="utf-8"></script>
+    <style media="screen">
+        body {
+            background: #FAFAFA;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .jumbotron {
+            text-align: center;
+        }
+
+        .footer {
+            margin-top: 20px;
+            border-top: 1px solid #e5e5e5;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello Notus!</h1>
+    <a href="https://github.com/kushalpandya/notus" target="_blank">
+        <img style="position: absolute; top: 0; right: 0; border: 0;"
+             src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
+             alt="Fork me on GitHub"
+             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+    </a>
+
+    <div class="container">
+        <div class="header clearfix">
+            <h1 class="text-muted">Notus</h1>
+        </div>
+        <div class="jumbotron">
+            <h2><b>Notus</b> - Web Notifications Widget</h2>
+            <p class="lead text-muted">Yet another pop-up notification library for the web, strictly without jQuery.</p>
+            <p><a href="#" class="btn btn-lg btn-success" role="button" id="btnNotify">Send Notification</a></p>
+        </div>
+        <div class="row features">
+            <div class="col-lg-6">
+                <h4>Pure JavaScript</h4>
+                <p>There are ton of Notification widgets out there but they all depend on jQuery, Notus doesn't.</p>
+            </div>
+            <div class="col-lg-6">
+                <h4>Full Flexible</h4>
+                <p>Notus is fully customizable and supports ton of ways to show notifications.</p>
+            </div>
+        </div>
+        <footer class="footer">
+            <p><a href="https://doublslash.com/">Kushal Pandya</a></p>
+        </footer>
+    </div>
+    <script type="text/javascript">
+        (function() {
+            var btnNotify = document.getElementById('btnNotify');
+
+            btnNotify.onclick = function(e) {
+                e.preventDefault();
+                alert('Boom!');
+            };
+        })();
+    </script>
 </body>
 </html>
