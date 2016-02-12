@@ -60,11 +60,14 @@
     </div>
     <script type="text/javascript">
         (function() {
-            var btnNotify = document.getElementById('btnNotify');
+            var btnNotify = document.getElementById('btnNotify'),
+                myNotus = notus({ someConfig: 'deep' });
 
             btnNotify.onclick = function(e) {
                 e.preventDefault();
-                alert('Boom!');
+                myNotus.send({
+                    message: 'Hello from Notus!'
+                });
             };
         })();
     </script>
