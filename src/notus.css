@@ -6,3 +6,41 @@
  *
  * Main Notus Stylesheet.
  */
+
+.notus-container {
+    position: fixed;
+    padding: 10px;
+}
+
+.notus {
+    border-style: solid;
+	border-width: 1px;
+	border-radius: 5px;
+    background: #BADA55;
+}
+
+.notus.notus-type-popup {
+    position: relative;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.notus-container.notus-position-tr,
+.notus-container.notus-position-tl {
+    top: 0;
+}
+
+.notus-container.notus-position-br,
+.notus-container.notus-position-tr {
+    right: 0;
+}
+
+.notus-container.notus-position-bl,
+.notus-container.notus-position-tl {
+    left: 0;
+}
+
+.notus-container.notus-position-br,
+.notus-container.notus-position-bl {
+    bottom: 0;
+}
