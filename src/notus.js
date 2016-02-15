@@ -16,6 +16,9 @@
         _n = {},
         notus;
 
+    var fnGetParentClassList,
+        fnCreateNotusEl;
+
     /**
      * Local Utility API.
      */
@@ -63,28 +66,81 @@
             }
 
             return str;
-        },
-
-        createNotusEl: function(config) {
-            var parentDiv = document.createElement('div'),
-                notusElTpl;
-
-            parentDiv.setAttribute('id', this.genId());
-            parentDiv.setAttribute('class', 'notus notus-float');
-
-            notusElTpl = [
-                '<div class="notus-body-item notus-text">',
-                    '{0}',
-                '</div>',
-                '<div class="notus-body-item notus-close">',
-                    '<span class="icon-close">&times;</span>',
-                '</div>'
-            ].join('');
-
-            parentDiv.innerHTML = this.format(notusElTpl, config.message);
-
-            return parentDiv;
         }
+    };
+
+    /**
+     * Helpers
+     */
+    fnGetParentClassList = function(config) {
+        var classList = [],
+            type = config.notusType,
+            position = config.notusPosition,
+            alertType = config.alertType;
+
+        if (type === 'popup')
+        {
+            classList.push('notus-type-popup');
+
+            if (position === 'top-left')
+                classList.push('notus-position-tl');
+            else if (position === 'top-right')
+                classList.push('notus-position-tr');
+            else if (position === 'bottom-left')
+                classList.push('notus-position-bl');
+            else
+                classList.push('notus-position-br');
+        }
+        else
+        {
+            classList.push(type === 'toast' ? 'notus-type-toast' : 'notus-type-snackbar');
+
+            if (position === 'top')
+                classList.push('notus-position-t');
+            else
+                classList.push('notus-position-b');
+        }
+
+        switch (alertType)
+        {
+            case 'success':
+                classList.push('notus-alert-success');
+                break;
+            case 'failure':
+                classList.push('notus-alert-failure');
+                break;
+            case 'warning':
+                classList.push('notus-alert-warning');
+                break;
+            default:
+                classList.push('notus-alert-custom');
+        }
+
+        return classList;
+    };
+
+    fnCreateNotusEl = function(config) {
+        var parentDiv = document.createElement('div'),
+            classList,
+            notusElTpl;
+
+        classList = fnGetParentClassList(config);
+
+        parentDiv.setAttribute('id', _n.genId());
+        parentDiv.setAttribute('class', 'notus ' + classList.join(' '));
+
+        notusElTpl = [
+            '<div class="notus-body-item notus-text">',
+                '{0}',
+            '</div>',
+            '<div class="notus-body-item notus-close">',
+                '<span class="icon-close">&times;</span>',
+            '</div>'
+        ].join('');
+
+        parentDiv.innerHTML = _n.format(notusElTpl, config.message);
+
+        return parentDiv;
     };
 
     notus = self.notus = function(userConfig) {
@@ -129,9 +185,7 @@
 
             config = _n.extend(userConfig, config);
 
-            notusEl = _n.createNotusEl({
-                message: config.message
-            });
+            notusEl = fnCreateNotusEl(config);
 
             bodyEL.appendChild(notusEl);
 
