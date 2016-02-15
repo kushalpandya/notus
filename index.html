@@ -25,6 +25,10 @@
             margin-top: 20px;
             border-top: 1px solid #e5e5e5;
         }
+
+        .configure-notus th {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -42,6 +46,135 @@
         <div class="jumbotron">
             <h2><b>Notus</b> - Web Notifications Widget</h2>
             <p class="lead text-muted">Yet another pop-up notification library for the web, strictly without jQuery.</p>
+            <div class="configure-notus">
+                <input type="text" class="form-control" id="notusMessage" placeholder="Message..." value="Hello from Notus!">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <th>Notus Type</th>
+                            <th>Position</th>
+                            <th>Alert Type</th>
+                            <th>Closable</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="notusType" value="popup" checked="checked">
+                                        Popup
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="notusPosition" value="top" data-supported="ts" disabled>
+                                        Top
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="alertType" checked="checked">
+                                        Success
+                                    </label>
+                                </div>
+                            </td>
+                            <td rowspan="6">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="closable">
+                                        Closable
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="notusType" value="toast">
+                                        Toast
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="notusPosition" value="bottom" data-supported="ts" disabled>
+                                        Bottom
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="alertType">
+                                        Failure
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="notusType" value="snackbar">
+                                        Snackbar
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="notusPosition" value="top-left" data-supported="p" checked="checked">
+                                        Top-left
+                                    </label>
+                                </div>
+                            </td>
+                            <td rowspan="4">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="alertType">
+                                        Warning
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr colspan="4">
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="notusPosition" value="top-right" data-supported="p">
+                                        Top-right
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr colspan="4">
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="notusPosition" value="bottom-left" data-supported="p">
+                                        Bottom-left
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr colspan="4">
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="notusPosition" value="bottom-right" data-supported="p">
+                                        Bottom-right
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
             <p><a href="#" class="btn btn-lg btn-success" role="button" id="btnNotify">Send Notification</a></p>
         </div>
         <div class="row features">
@@ -61,13 +194,67 @@
     <script type="text/javascript">
         (function() {
             var btnNotify = document.getElementById('btnNotify'),
-                myNotus = notus({ animate: false });
+                rdNotusType = document.querySelectorAll('input[type="radio"][name="notusType"]'),
+                rdNotusPosition = document.querySelectorAll('input[type="radio"][name="notusPosition"]'),
+                rdAlertType = document.querySelectorAll('input[type="radio"][name="alertType"]'),
+                myNotus = notus({ animate: false }),
+                notusType = "popup",
+                notusPosition = "top-left",
+                alertType = "success",
+                count = 1,
+                i;
+
+            for (i = 0; i < rdNotusType.length; i++)
+            {
+                rdNotusType[i].onchange = function(e) {
+                    var supportPositions,
+                        j;
+
+                    if (this.checked)
+                        notusType = this.value;
+
+                    supportPositions = document.querySelectorAll('input[type="radio"][data-supported]');
+
+                    for (j = 0; j < supportPositions.length; j++)
+                    {
+                        if (notusType == 'popup')
+                        {
+                            supportPositions[j].disabled = (supportPositions[j].dataset.supported === 'ts');
+                            document.querySelectorAll('input[type="radio"][data-supported="p"]')[0].checked = true;
+                        }
+                        else
+                        {
+                            supportPositions[j].disabled = (supportPositions[j].dataset.supported === 'p');
+                            document.querySelectorAll('input[type="radio"][data-supported="ts"]')[0].checked = true;
+                        }
+                    }
+                };
+            }
+
+            for (i = 0; i < rdNotusPosition.length; i++)
+            {
+                rdNotusPosition[i].onchange = function(e) {
+                    if (this.checked)
+                        notusPosition = this.value;
+                }
+            }
+
+            for (i = 0; i < rdAlertType.length; i++)
+            {
+                rdAlertType[i].onchange = function(e) {
+                    if (this.checked)
+                        alertType = this.value;
+                }
+            }
 
             btnNotify.onclick = function(e) {
                 e.preventDefault();
                 myNotus.send({
-                    message: 'Hello from Notus!',
-                    closable: false
+                    message: document.getElementById('notusMessage').value,
+                    closable: document.querySelector('input[type="checkbox"][name="closable"]').checked,
+                    notusType: notusType,
+                    notusPosition: notusPosition,
+                    alertType: alertType
                 });
             };
         })();
