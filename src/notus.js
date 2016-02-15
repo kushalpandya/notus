@@ -17,6 +17,7 @@
         notus;
 
     var fnGetParentClassList,
+        fnCreateNotusContainer,
         fnCreateNotusEl;
 
     /**
@@ -79,18 +80,7 @@
             alertType = config.alertType;
 
         if (type === 'popup')
-        {
             classList.push('notus-type-popup');
-
-            if (position === 'top-left')
-                classList.push('notus-position-tl');
-            else if (position === 'top-right')
-                classList.push('notus-position-tr');
-            else if (position === 'bottom-left')
-                classList.push('notus-position-bl');
-            else
-                classList.push('notus-position-br');
-        }
         else
         {
             classList.push(type === 'toast' ? 'notus-type-toast' : 'notus-type-snackbar');
@@ -119,23 +109,61 @@
         return classList;
     };
 
+    fnCreateNotusContainer = function(config) {
+        var type = config.notusType,
+            position = config.notusPosition,
+            positionCls,
+            containerEl;
+
+        if (type === 'popup')
+        {
+            if (position === 'top-left')
+                positionCls = 'notus-position-tl';
+            else if (position === 'top-right')
+                positionCls = 'notus-position-tr';
+            else if (position === 'bottom-left')
+                positionCls = 'notus-position-bl';
+            else
+                positionCls = 'notus-position-br';
+        }
+
+        containerEl = document.querySelector('.notus-container.' + positionCls);
+
+        if (!containerEl)
+        {
+            containerEl = document.createElement('div');
+            containerEl.setAttribute('class', 'notus-container ' + positionCls);
+            document.body.appendChild(containerEl);
+        }
+
+        return containerEl;
+    };
+
     fnCreateNotusEl = function(config) {
         var parentDiv = document.createElement('div'),
-            classList,
-            notusElTpl;
+            classList = [],
+            notusElTpl = '',
+            closeElTpl = '';
 
         classList = fnGetParentClassList(config);
 
         parentDiv.setAttribute('id', _n.genId());
         parentDiv.setAttribute('class', 'notus ' + classList.join(' '));
 
+        if (config.closable)
+        {
+            closeElTpl = [
+                '<div class="notus-body-item notus-close">',
+                    '<span class="icon-close">&times;</span>',
+                '</div>'
+            ].join('');
+        }
+
         notusElTpl = [
             '<div class="notus-body-item notus-text">',
                 '{0}',
             '</div>',
-            '<div class="notus-body-item notus-close">',
-                '<span class="icon-close">&times;</span>',
-            '</div>'
+            closeElTpl
         ].join('');
 
         parentDiv.innerHTML = _n.format(notusElTpl, config.message);
@@ -152,7 +180,7 @@
         defaultConfig = {
             notusType: 'popup',                     /* Type can be anything from; 'popup', 'toast' or 'snackbar' */
 
-            notusPosition: 'left',                  /* Available positions for different notus types;
+            notusPosition: 'top-right',             /* Available positions for different notus types;
                                                        'popup'              => 'top-left', 'bottom-left', 'top-right' or 'bottom-right'
                                                        'toast' & 'snackbar' => 'top' or 'bottom' */
 
@@ -181,13 +209,19 @@
 
 
         thisNotus.send = function(config) {
-            var notusEl;
+            var containerEl,
+                notusEl;
 
             config = _n.extend(userConfig, config);
 
+            containerEl = fnCreateNotusContainer(config);
+
             notusEl = fnCreateNotusEl(config);
 
-            bodyEL.appendChild(notusEl);
+            if (config.notusPosition.indexOf('bottom-') > -1)
+                containerEl.insertBefore(notusEl, containerEl.firstChild);
+            else
+                containerEl.appendChild(notusEl);
 
             return notusEl.getAttribute('id');
         };
