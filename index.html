@@ -61,12 +61,13 @@
     <script type="text/javascript">
         (function() {
             var btnNotify = document.getElementById('btnNotify'),
-                myNotus = notus({ someConfig: 'deep' });
+                myNotus = notus({ animate: false });
 
             btnNotify.onclick = function(e) {
                 e.preventDefault();
                 myNotus.send({
-                    message: 'Hello from Notus!'
+                    message: 'Hello from Notus!',
+                    closable: false
                 });
             };
         })();
