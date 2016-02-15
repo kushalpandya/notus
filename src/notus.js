@@ -87,9 +87,31 @@
         }
     };
 
-    notus = self.notus = function(defaultConfig) {
+    notus = self.notus = function(userConfig) {
         var bodyEL = document.body,
+            defaultConfig = {},
             thisNotus = {};
+
+        /** Default Config options that Notus provides **/
+        defaultConfig = {
+            notusType: 'popup',                     /* Type can be anything from; 'popup', 'toast' or 'snackbar' */
+
+            notusPosition: 'left',                  /* Available positions for different notus types;
+                                                       'popup'              => 'top-left', 'bottom-left', 'top-right' or 'bottom-right'
+                                                       'toast' & 'snackbar' => 'top' or 'bottom' */
+
+            alertType: 'success',                   /* Alert type can be; 'success', 'failure' or 'warning' */
+
+            closable: true,                         /* Show close button to close Notus */
+
+            autoClose: true,                        /* Automatically close Notus once autoCloseDuration completes */
+
+            autoCloseDuration: 3000,                /* Milliseconds to wait before closing  */
+
+            animate: true                           /* Animate while showing/hiding Notus */
+        };
+
+        userConfig = _n.extend(defaultConfig, userConfig);
 
         /** Notus API begin **/
 
@@ -104,6 +126,8 @@
 
         thisNotus.send = function(config) {
             var notusEl;
+
+            config = _n.extend(userConfig, config);
 
             notusEl = _n.createNotusEl({
                 message: config.message
