@@ -55,6 +55,8 @@
                             <th>Position</th>
                             <th>Alert Type</th>
                             <th>Closable</th>
+                            <th>Animate</th>
+                            <th>Animation Type</th>
                         </tr>
                         <tr>
                             <td>
@@ -89,6 +91,22 @@
                                     </label>
                                 </div>
                             </td>
+                            <td rowspan="6">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="animate" checked="checked">
+                                        Animate
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="animationType" value="slide" checked="checked">
+                                        Slide
+                                    </label>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -112,6 +130,14 @@
                                     <label>
                                         <input type="radio" name="alertType">
                                         Failure
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="animationType" value="fade">
+                                        Fade
                                     </label>
                                 </div>
                             </td>
@@ -194,13 +220,16 @@
     <script type="text/javascript">
         (function() {
             var btnNotify = document.getElementById('btnNotify'),
+                cbAnimate = document.querySelector('input[type="checkbox"][name="animate"]'),
                 rdNotusType = document.querySelectorAll('input[type="radio"][name="notusType"]'),
                 rdNotusPosition = document.querySelectorAll('input[type="radio"][name="notusPosition"]'),
                 rdAlertType = document.querySelectorAll('input[type="radio"][name="alertType"]'),
+                rdAnimationType = document.querySelectorAll('input[type="radio"][name="animationType"]'),
                 myNotus = notus({ animate: false }),
                 notusType = "popup",
                 notusPosition = "top-left",
                 alertType = "success",
+                animationType = "slide",
                 count = 1,
                 i;
 
@@ -221,11 +250,13 @@
                         {
                             supportPositions[j].disabled = (supportPositions[j].dataset.supported === 'ts');
                             document.querySelectorAll('input[type="radio"][data-supported="p"]')[0].checked = true;
+                            notusPosition = 'top-left';
                         }
                         else
                         {
                             supportPositions[j].disabled = (supportPositions[j].dataset.supported === 'p');
                             document.querySelectorAll('input[type="radio"][data-supported="ts"]')[0].checked = true;
+                            notusPosition = 'top';
                         }
                     }
                 };
@@ -247,6 +278,28 @@
                 }
             }
 
+            for (i = 0; i < rdAnimationType.length; i++)
+            {
+                rdAnimationType[i].onchange = function(e) {
+                    if (this.checked)
+                        animationType = this.value;
+                };
+            }
+
+            cbAnimate.onchange = function(e) {
+                for (i = 0; i < rdAnimationType.length; i++)
+                {
+                    rdAnimationType[i].checked = false;
+                    rdAnimationType[i].disabled = !this.checked;
+                }
+
+                if (this.checked)
+                {
+                    rdAnimationType[0].checked = true;
+                    animationType = "slide";
+                }
+            };
+
             btnNotify.onclick = function(e) {
                 e.preventDefault();
                 myNotus.send({
@@ -254,7 +307,9 @@
                     closable: document.querySelector('input[type="checkbox"][name="closable"]').checked,
                     notusType: notusType,
                     notusPosition: notusPosition,
-                    alertType: alertType
+                    alertType: alertType,
+                    animate: document.querySelector('input[type="checkbox"][name="animate"]').checked,
+                    animationType: animationType
                 });
             };
         })();
