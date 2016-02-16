@@ -18,6 +18,7 @@
 
     var fnGetParentClassList,
         fnCreateNotusContainer,
+        fnGetAnimatorStyle,
         fnCreateNotusEl;
 
     /**
@@ -82,14 +83,7 @@
         if (type === 'popup')
             classList.push('notus-type-popup');
         else
-        {
             classList.push(type === 'toast' ? 'notus-type-toast' : 'notus-type-snackbar');
-
-            if (position === 'top')
-                classList.push('notus-position-t');
-            else
-                classList.push('notus-position-b');
-        }
 
         switch (alertType)
         {
@@ -112,31 +106,61 @@
     fnCreateNotusContainer = function(config) {
         var type = config.notusType,
             position = config.notusPosition,
-            positionCls,
+            containerCls = ['notus-container'],
             containerEl;
 
         if (type === 'popup')
         {
             if (position === 'top-left')
-                positionCls = 'notus-position-tl';
+                containerCls.push('notus-position-tl');
             else if (position === 'top-right')
-                positionCls = 'notus-position-tr';
+                containerCls.push('notus-position-tr');
             else if (position === 'bottom-left')
-                positionCls = 'notus-position-bl';
+                containerCls.push('notus-position-bl');
             else
-                positionCls = 'notus-position-br';
+                containerCls.push('notus-position-br');
+        }
+        else
+        {
+            containerCls.push((type === 'toast') ? 'notus-container-toast' : 'notus-container-snackbar');
+            containerCls.push((position === 'top') ? 'notus-position-top' : 'notus-position-bottom');
         }
 
-        containerEl = document.querySelector('.notus-container.' + positionCls);
+        containerEl = document.querySelector('.' + containerCls.join('.'));
 
         if (!containerEl)
         {
             containerEl = document.createElement('div');
-            containerEl.setAttribute('class', 'notus-container ' + positionCls);
+            containerEl.setAttribute('class', containerCls.join(' '));
             document.body.appendChild(containerEl);
         }
 
         return containerEl;
+    };
+
+    fnGetAnimatorStyle = function(config) {
+        var type = config.notusType,
+            position = config.notusPosition,
+            animationType = config.animationType,
+            isSlide = animationType === 'slide',
+            animators = [];
+
+        if (type === 'popup')
+        {
+            if (position.indexOf('-right') > -1)
+                animators.push(isSlide ? 'left: 0' : 'opacity: 1');
+            else if (position.indexOf('-left') > -1)
+                animators.push(isSlide ? 'right: 0' : 'opacity: 1');
+        }
+        else
+        {
+            if (position === 'top')
+                animators.push(isSlide ? 'top: 0' : 'opacity: 1');
+            else
+                animators.push(isSlide ? 'bottom: 0' : 'opacity: 1');
+        }
+
+        return animators;
     };
 
     fnCreateNotusEl = function(config) {
@@ -146,6 +170,13 @@
             closeElTpl = '';
 
         classList = fnGetParentClassList(config);
+
+        if (config.animate)
+        {
+            classList.push(config.animationType === 'slide' ? 'notus-slide' : 'notus-fade');
+
+            parentDiv.setAttribute('style', fnGetAnimatorStyle(config).join(';'));
+        }
 
         parentDiv.setAttribute('id', _n.genId());
         parentDiv.setAttribute('class', 'notus ' + classList.join(' '));
@@ -192,7 +223,9 @@
 
             autoCloseDuration: 3000,                /* Milliseconds to wait before closing  */
 
-            animate: true                           /* Animate while showing/hiding Notus */
+            animate: true,                          /* Animate while showing/hiding Notus */
+
+            animationType: 'slide'                  /* Animation Type while showing/hiding Notus; it can be 'slide' or 'fade' */
         };
 
         userConfig = _n.extend(defaultConfig, userConfig);
@@ -207,7 +240,6 @@
             return notus;
         };
 
-
         thisNotus.send = function(config) {
             var containerEl,
                 notusEl;
@@ -218,7 +250,7 @@
 
             notusEl = fnCreateNotusEl(config);
 
-            if (config.notusPosition.indexOf('bottom-') > -1)
+            if (config.notusPosition.indexOf('bottom') > -1)
                 containerEl.insertBefore(notusEl, containerEl.firstChild);
             else
                 containerEl.appendChild(notusEl);
