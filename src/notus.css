@@ -7,26 +7,56 @@
  * Main Notus Stylesheet.
  */
 
+@keyframes slide-in-right {
+    0% {
+        left: 100%;
+    }
+}
+
+@keyframes slide-in-left {
+    0% {
+        right: 100%;
+    }
+}
+
+@keyframes slide-in-top {
+    0% {
+        top: -200px;
+    }
+}
+
+@keyframes slide-in-bottom {
+    0% {
+        bottom: -100px;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+}
+
 .notus-container {
     position: fixed;
-    padding: 10px;
+    pointer-events: none;
+    z-index: 9999999;
 }
 
 .notus {
+    position: relative;
+    margin: 10px auto;
+    padding: 10px;
     border-style: solid;
 	border-width: 1px;
 	border-radius: 5px;
     background: #BADA55;
-}
-
-.notus.notus-type-popup {
-    position: relative;
-    padding: 10px;
-    margin-bottom: 10px;
+    pointer-events: all;
 }
 
 .notus-container.notus-position-tr,
-.notus-container.notus-position-tl {
+.notus-container.notus-position-tl,
+.notus-container.notus-position-top {
     top: 0;
 }
 
@@ -41,6 +71,73 @@
 }
 
 .notus-container.notus-position-br,
-.notus-container.notus-position-bl {
+.notus-container.notus-position-bl,
+.notus-container.notus-position-bottom {
     bottom: 0;
+}
+
+.notus-container.notus-position-top,
+.notus-container.notus-position-bottom {
+    display: block;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.notus-container.notus-container-snackbar {
+    width: 100%;
+}
+
+.notus-container.notus-position-bl .notus,
+.notus-container.notus-position-tl .notus {
+    margin-left: 10px;
+}
+
+.notus-container.notus-position-br .notus,
+.notus-container.notus-position-tr .notus {
+    margin-right: 10px;
+}
+
+.notus-position-top .notus,
+.notus-position-bottom .notus {
+    width: 200px;
+}
+
+.notus-position-top .notus.notus-type-snackbar,
+.notus-position-bottom .notus.notus-type-snackbar {
+    width: 60%;
+    margin: 0 auto;
+}
+
+/* Slide-in for Popup */
+.notus-position-tr .notus-type-popup.notus-slide,
+.notus-position-br .notus-type-popup.notus-slide {
+    animation: slide-in-right .2s;
+}
+
+.notus-position-tl .notus-type-popup.notus-slide,
+.notus-position-bl .notus-type-popup.notus-slide {
+    animation: slide-in-left .2s;
+}
+
+/* Fade-in for Popup */
+.notus-type-popup.notus-fade {
+    animation: fade-in .4s;
+}
+
+/* Slide-in for Toast / Snackbar */
+.notus-position-top .notus-type-toast.notus-slide,
+.notus-position-top .notus-type-snackbar.notus-slide {
+    animation: slide-in-top .2s;
+}
+
+.notus-position-bottom .notus-type-toast.notus-slide,
+.notus-position-bottom .notus-type-snackbar.notus-slide {
+    animation: slide-in-bottom .2s;
+}
+
+/* Fade-in for Toast / Snackbar */
+.notus-type-toast.notus-fade,
+.notus-type-snackbar.notus-fade {
+    animation: fade-in .4s;
 }
