@@ -19,6 +19,7 @@
     var fnGetParentClassList,
         fnCreateNotusContainer,
         fnGetAnimatorStyle,
+        fnBindCloseHandler,
         fnCreateNotusEl;
 
     /**
@@ -142,6 +143,27 @@
         return containerEl;
     };
 
+    fnBindCloseHandler = function(config, notusEl) {
+        var type = config.notusType,
+            closeEl = notusEl.querySelector('.notus-close');
+
+        closeEl.onclick = function(e) {
+            var doRemove = false,
+                handlerReturnVal;
+                
+            if (typeof config.closeHandler === 'function')
+            {
+                handlerReturnVal = config.closeHandler.apply(this, arguments);
+                doRemove = (typeof handlerReturnVal === 'boolean') ? handlerReturnVal : true;
+            }
+            else
+                doRemove = true;
+
+            if (doRemove)
+                notusEl.remove();
+        };
+    };
+
     fnGetAnimatorStyle = function(config) {
         var type = config.notusType,
             position = config.notusPosition,
@@ -250,6 +272,9 @@
             containerEl = fnCreateNotusContainer(config);
 
             notusEl = fnCreateNotusEl(config);
+
+            if (config.closable)
+                fnBindCloseHandler(config, notusEl);
 
             if (config.notusPosition.indexOf('bottom') > -1)
                 containerEl.insertBefore(notusEl, containerEl.firstChild);
