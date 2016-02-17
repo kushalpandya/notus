@@ -161,6 +161,7 @@
         var parentDiv = document.createElement('div'),
             classList = [],
             notusElTpl = '',
+            notusTitleElTpl = '',
             closeElTpl = '';
 
         classList = fnGetParentClassList(config);
@@ -184,9 +185,12 @@
             ].join('');
         }
 
+        if (config.notusType !== 'snackbar')
+            notusTitleElTpl = '<div class="notus-content-title">{0}</div>';
+
         notusElTpl = [
             '<div class="notus-body-item notus-content">',
-                '<div class="notus-content-title">{0}</div>',
+                notusTitleElTpl,
                 '<div class="notus-content-body">',
                     '{1}',
                 '</div>',
