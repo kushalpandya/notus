@@ -96,9 +96,13 @@
             case 'warning':
                 classList.push('notus-alert-warning');
                 break;
+            case 'none':
+                break;
             default:
                 classList.push('notus-alert-custom');
         }
+
+        classList.push('notus-material-light');
 
         return classList;
     };
@@ -181,13 +185,16 @@
         }
 
         notusElTpl = [
-            '<div class="notus-body-item notus-text">',
-                '{0}',
+            '<div class="notus-body-item notus-content">',
+                '<div class="notus-content-title">{0}</div>',
+                '<div class="notus-content-body">',
+                    '{1}',
+                '</div>',
             '</div>',
             closeElTpl
         ].join('');
 
-        parentDiv.innerHTML = _n.format(notusElTpl, config.message);
+        parentDiv.innerHTML = _n.format(notusElTpl, config.title, config.message);
 
         return parentDiv;
     };
@@ -205,7 +212,7 @@
                                                        'popup'              => 'top-left', 'bottom-left', 'top-right' or 'bottom-right'
                                                        'toast' & 'snackbar' => 'top' or 'bottom' */
 
-            alertType: 'success',                   /* Alert type can be; 'success', 'failure' or 'warning' */
+            alertType: 'none',                      /* Alert type can be; 'none', 'success', 'failure' or 'warning' */
 
             closable: true,                         /* Show close button to close Notus */
 
