@@ -152,6 +152,13 @@
     pointer-events: all;
 }
 
+.notus .notus-close {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+
 
 /**** Material Light ****/
 .notus.notus-type-popup.notus-material-light {
