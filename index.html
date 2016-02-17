@@ -17,8 +17,24 @@
             border-bottom: 1px solid #e5e5e5;
         }
 
-        .jumbotron {
+        .container .jumbotron {
             text-align: center;
+        }
+
+        .container .jumbotron,
+        .jumbotron input[type="text"] {
+            border-radius: 0;
+        }
+
+        .jumbotron p,
+        .jumbotron th,
+        .jumbotron td,
+        .jumbotron input[type="text"] {
+            font-family: monospace;
+        }
+
+        .jumbotron th {
+            font-size: 1.2em;
         }
 
         .footer {
@@ -28,6 +44,19 @@
 
         .configure-notus th {
             text-align: center;
+        }
+
+        .notus-types {
+            margin-top: 10px;
+        }
+
+        .notus-types label {
+            font-size: 1.5em;
+            line-height: 1em;
+        }
+
+        .notus-options {
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -48,25 +77,36 @@
             <p class="lead text-muted">Yet another pop-up notification library for the web, strictly without jQuery.</p>
             <div class="configure-notus">
                 <input type="text" class="form-control" id="notusMessage" placeholder="Message..." value="Hello from Notus!">
-                <div class="table-responsive">
+                <div class="row notus-types">
+                    <div class="col-xs-6 col-sm-4">
+                        <label class="radio-inline">
+                            <input type="radio" name="notusType" value="popup" checked="checked">
+                            Popup
+                        </label>
+                    </div>
+                    <div class="col-xs-6 col-sm-4">
+                        <label class="radio-inline">
+                            <input type="radio" name="notusType" value="toast">
+                            Toast
+                        </label>
+                    </div>
+                    <div class="col-xs-6 col-sm-4">
+                        <label class="radio-inline">
+                            <input type="radio" name="notusType" value="snackbar">
+                            Snackbar
+                        </label>
+                    </div>
+                </div>
+                <div class="table-responsive notus-options">
                     <table class="table">
                         <tr>
-                            <th>Notus Type</th>
-                            <th>Position</th>
-                            <th>Alert Type</th>
-                            <th>Closable</th>
-                            <th>Animate</th>
-                            <th>Animation Type</th>
+                            <th><i class="glyphicon glyphicon-move"></i> Position</th>
+                            <th><i class="glyphicon glyphicon-warning-sign"></i> Alert Type</th>
+                            <th><i class="glyphicon glyphicon-remove-sign"></i> Closable</th>
+                            <th><i class="glyphicon glyphicon-play-circle"></i> Animate</th>
+                            <th><i class="glyphicon glyphicon-dashboard"></i> Animation Type</th>
                         </tr>
                         <tr>
-                            <td>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="notusType" value="popup" checked="checked">
-                                        Popup
-                                    </label>
-                                </div>
-                            </td>
                             <td>
                                 <div class="radio">
                                     <label>
@@ -112,14 +152,6 @@
                             <td>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="notusType" value="toast">
-                                        Toast
-                                    </label>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="radio">
-                                    <label>
                                         <input type="radio" name="notusPosition" value="bottom" data-supported="ts" disabled>
                                         Bottom
                                     </label>
@@ -143,14 +175,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td rowspan="4">
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="notusType" value="snackbar">
-                                        Snackbar
-                                    </label>
-                                </div>
-                            </td>
                             <td>
                                 <div class="radio">
                                     <label>
@@ -201,7 +225,7 @@
                     </table>
                 </div>
             </div>
-            <p><a href="#" class="btn btn-lg btn-success" role="button" id="btnNotify">Send Notification</a></p>
+            <p><a href="#" class="btn btn-lg btn-primary" role="button" id="btnNotify"><i class="glyphicon glyphicon-play"></i> Send Notification</a></p>
         </div>
         <div class="row features">
             <div class="col-lg-6">
