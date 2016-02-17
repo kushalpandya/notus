@@ -146,19 +146,9 @@
             animators = [];
 
         if (type === 'popup')
-        {
-            if (position.indexOf('-right') > -1)
-                animators.push(isSlide ? 'left: 0' : 'opacity: 1');
-            else if (position.indexOf('-left') > -1)
-                animators.push(isSlide ? 'right: 0' : 'opacity: 1');
-        }
+            animators.push(isSlide ? 'transform: translateX(0%)' : 'opacity: 1');
         else
-        {
-            if (position === 'top')
-                animators.push(isSlide ? 'top: 0' : 'opacity: 1');
-            else
-                animators.push(isSlide ? 'bottom: 0' : 'opacity: 1');
-        }
+            animators.push(isSlide ? 'transform: translateY(0%)' : 'opacity: 1');
 
         return animators;
     };

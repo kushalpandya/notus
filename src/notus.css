@@ -9,25 +9,25 @@
 
 @keyframes slide-in-right {
     0% {
-        left: 100%;
+        transform: translateX(100%);
     }
 }
 
 @keyframes slide-in-left {
     0% {
-        right: 100%;
+        transform: translateX(-100%);
     }
 }
 
 @keyframes slide-in-top {
     0% {
-        top: -200px;
+        transform: translateY(-100%);
     }
 }
 
 @keyframes slide-in-bottom {
     0% {
-        bottom: -100px;
+        transform: translateY(100%);
     }
 }
 
@@ -109,35 +109,41 @@
     margin: 0 auto;
 }
 
+/* Common Animation Config */
+.notus-type-popup.notus-slide,
+.notus-type-toast.notus-slide,
+.notus-type-snackbar.notus-slide {
+    animation-duration:  .2s;
+    animation-timing-function: ease-in-out;
+}
+
 /* Slide-in for Popup */
 .notus-position-tr .notus-type-popup.notus-slide,
 .notus-position-br .notus-type-popup.notus-slide {
-    animation: slide-in-right .2s;
+    animation-name: slide-in-right;
 }
 
 .notus-position-tl .notus-type-popup.notus-slide,
 .notus-position-bl .notus-type-popup.notus-slide {
-    animation: slide-in-left .2s;
-}
-
-/* Fade-in for Popup */
-.notus-type-popup.notus-fade {
-    animation: fade-in .4s;
+    animation-name: slide-in-left;
 }
 
 /* Slide-in for Toast / Snackbar */
 .notus-position-top .notus-type-toast.notus-slide,
 .notus-position-top .notus-type-snackbar.notus-slide {
-    animation: slide-in-top .2s;
+    animation-name: slide-in-top;
 }
 
 .notus-position-bottom .notus-type-toast.notus-slide,
 .notus-position-bottom .notus-type-snackbar.notus-slide {
-    animation: slide-in-bottom .2s;
+    animation-name: slide-in-bottom;
 }
 
-/* Fade-in for Toast / Snackbar */
+/* Fade-in for Popup / Toast / Snackbar */
+.notus-type-popup.notus-fade,
 .notus-type-toast.notus-fade,
 .notus-type-snackbar.notus-fade {
-    animation: fade-in .4s;
+    animation-name: fade-in;
+    animation-duration:  .4s;
+    animation-timing-function: ease-in-out;
 }
