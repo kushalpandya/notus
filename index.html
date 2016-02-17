@@ -9,7 +9,7 @@
     <script src="src/notus.js" charset="utf-8"></script>
     <style media="screen">
         body {
-            background: #FAFAFA;
+            background-color: #F6F6F6 !important;
         }
 
         .header {
@@ -22,19 +22,25 @@
         }
 
         .container .jumbotron,
-        .jumbotron input[type="text"] {
+        .jumbotron input[type="text"],
+        .jumbotron textarea {
             border-radius: 0;
         }
 
         .jumbotron p,
         .jumbotron th,
         .jumbotron td,
-        .jumbotron input[type="text"] {
+        .jumbotron input[type="text"],
+        .jumbotron textarea {
             font-family: monospace;
         }
 
         .jumbotron th {
             font-size: 1.2em;
+        }
+
+        .form-group label {
+            float: left;
         }
 
         .footer {
@@ -76,7 +82,14 @@
             <h2><b>Notus</b> - Web Notifications Widget</h2>
             <p class="lead text-muted">Yet another pop-up notification library for the web, strictly without jQuery.</p>
             <div class="configure-notus">
-                <input type="text" class="form-control" id="notusMessage" placeholder="Message..." value="Hello from Notus!">
+                <div class="form-group">
+                    <label for="notusMessage">Title</label>
+                    <input id="notusTitle" type="text" class="form-control" placeholder="Title..." value="Notus Message">
+                </div>
+                <div class="form-group">
+                    <label for="notusMessage">Message</label>
+                    <textarea id="notusMessage" class="form-control" rows="3" placeholder="Message...">Hello from Notus!</textarea>
+                </div>
                 <div class="row notus-types">
                     <div class="col-xs-6 col-sm-4">
                         <label class="radio-inline">
@@ -118,15 +131,15 @@
                             <td>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="alertType" checked="checked">
-                                        Success
+                                        <input type="radio" name="alertType" checked="checked" value="none">
+                                        None
                                     </label>
                                 </div>
                             </td>
                             <td rowspan="6">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" name="closable">
+                                        <input type="checkbox" name="closable" checked="checked">
                                         Closable
                                     </label>
                                 </div>
@@ -160,8 +173,8 @@
                             <td>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="alertType">
-                                        Failure
+                                        <input type="radio" name="alertType" value="success">
+                                        Success
                                     </label>
                                 </div>
                             </td>
@@ -183,11 +196,11 @@
                                     </label>
                                 </div>
                             </td>
-                            <td rowspan="4">
+                            <td>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="alertType">
-                                        Warning
+                                        <input type="radio" name="alertType" value="failure">
+                                        Failure
                                     </label>
                                 </div>
                             </td>
@@ -198,6 +211,14 @@
                                     <label>
                                         <input type="radio" name="notusPosition" value="top-right" data-supported="p">
                                         Top-right
+                                    </label>
+                                </div>
+                            </td>
+                            <td rowspan="3">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="alertType" value="warning">
+                                        Warning
                                     </label>
                                 </div>
                             </td>
@@ -252,7 +273,7 @@
                 myNotus = notus({ animate: false }),
                 notusType = "popup",
                 notusPosition = "top-left",
-                alertType = "success",
+                alertType = "none",
                 animationType = "slide",
                 count = 1,
                 i;
@@ -283,6 +304,8 @@
                             notusPosition = 'top';
                         }
                     }
+
+                    document.getElementById('notusTitle').disabled = (notusType === 'snackbar');
                 };
             }
 
@@ -327,6 +350,7 @@
             btnNotify.onclick = function(e) {
                 e.preventDefault();
                 myNotus.send({
+                    title: notusType !== 'snackbar' ? document.getElementById('notusTitle').value : undefined,
                     message: document.getElementById('notusMessage').value,
                     closable: document.querySelector('input[type="checkbox"][name="closable"]').checked,
                     notusType: notusType,
