@@ -102,6 +102,14 @@
     margin: 0 auto;
 }
 
+.notus-position-top .notus.notus-type-snackbar {
+    margin-bottom: 10px;
+}
+
+.notus-position-bottom .notus.notus-type-snackbar {
+    margin-top: 10px;
+}
+
 /*---------------- Built-in Animation Config ----------------*/
 
 /* Common Animation Config */
@@ -161,9 +169,7 @@
 
 
 /**** Material Light ****/
-.notus.notus-type-popup.notus-material-light:not(.notus-type-snackbar) {
-    width: 300px;
-    min-height: 100px;
+.notus.notus-material-light {
     padding: 8px;
     color: #333;
     background-color: white;
@@ -175,37 +181,75 @@
     border-radius: 2px;
 }
 
+.notus.notus-material-light .notus-close {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    padding: 3px 4px;
+    font-size: 1.5em;
+    line-height: 15px;
+}
+
+.notus.notus-material-light .notus-close,
+.notus.notus-material-light .notus-action {
+    cursor: pointer;
+}
+
+.notus.notus-material-light .notus-close:hover,
+.notus.notus-material-light .notus-action:hover {
+    background-color: #EDEDED;
+}
+
+.notus.notus-material-light.notus-alert-success .notus-content-body {
+    color: #227744;
+}
+
+.notus.notus-material-light.notus-alert-failure .notus-content-body {
+    color: #6C0000;
+}
+
+.notus.notus-material-light.notus-alert-warning .notus-content-body {
+    color: #4D4700;
+}
+
+.notus.notus-material-light.notus-alert-success {
+    border: 1px solid #CAEFC5;
+}
+
+.notus.notus-material-light.notus-alert-failure {
+    border: 1px solid #FFB1B1;
+}
+
+.notus.notus-material-light.notus-alert-warning {
+    border: 1px solid #D1CC90;
+}
+
+.notus.notus-material-light.notus-alert-success .notus-content-title {
+    color: #174f2d;
+}
+
+.notus.notus-material-light.notus-alert-failure .notus-content-title {
+    color: #390000;
+}
+
+.notus.notus-material-light.notus-alert-warning .notus-content-title {
+    color: #1a1800;
+}
+
+/** Common Styles for Popup & Toast **/
+
+.notus.notus-material-light:not(.notus-type-snackbar) {
+    width: 300px;
+    min-height: 100px;
+}
+
 .notus.notus-material-light:not(.notus-type-snackbar) .notus-content {
     max-width: 95%;
 }
 
-.notus.notus-material-light:not(.notus-type-snackbar) .notus-content .notus-content-title {
+.notus.notus-material-light:not(.notus-type-snackbar) .notus-content-title {
     font-size: 16px;
     font-weight: 700;
-}
-
-.notus.notus-material-light.notus-alert-success:not(.notus-type-snackbar) {
-    border: 1px solid #CAEFC5;
-}
-
-.notus.notus-material-light.notus-alert-failure:not(.notus-type-snackbar) {
-    border: 1px solid #FFB1B1;
-}
-
-.notus.notus-material-light.notus-alert-warning:not(.notus-type-snackbar) {
-    border: 1px solid #D1CC90;
-}
-
-.notus.notus-material-light.notus-alert-success:not(.notus-type-snackbar) .notus-content-title {
-    color: #174f2d;
-}
-
-.notus.notus-material-light.notus-alert-failure:not(.notus-type-snackbar) .notus-content-title {
-    color: #390000;
-}
-
-.notus.notus-material-light.notus-alert-warning:not(.notus-type-snackbar) .notus-content-title {
-    color: #1a1800;
 }
 
 .notus.notus-material-light:not(.notus-type-snackbar) .notus-content-body {
@@ -213,33 +257,33 @@
     font-size: 12px;
 }
 
-.notus.notus-material-light.notus-alert-success:not(.notus-type-snackbar) .notus-content-body {
-    color: #227744;
-}
-
-.notus.notus-material-light.notus-alert-failure:not(.notus-type-snackbar) .notus-content-body {
-    color: #6C0000;
-}
-
-.notus.notus-material-light.notus-alert-warning:not(.notus-type-snackbar) .notus-content-body {
-    color: #4D4700;
-}
-
 .notus.notus-material-light:not(.notus-type-snackbar) .notus-close {
-    position: absolute;
     top: 0;
     right: 0;
-    height: 20px;
-    width: 20px;
-    padding: 3px 4px;
-    cursor: pointer;
 }
 
-.notus.notus-material-light:not(.notus-type-snackbar) .notus-close:hover {
-    background-color: #EDEDED;
+/** Styles for Snackbar **/
+
+.notus.notus-type-snackbar.notus-material-light:after {
+    content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
 }
 
-.notus.notus-material-light:not(.notus-type-snackbar) .icon-close {
-    font-size: 1.5em;
-    line-height: 10px;
+.notus.notus-type-snackbar.notus-material-light .notus-close {
+    left: 5px;
+}
+
+.notus.notus-material-light.notus-type-snackbar .notus-content {
+    float: left;
+    margin-left: 25px;
+}
+
+.notus.notus-type-snackbar.notus-material-light .notus-action {
+    float: right;
+    color: #777;
+    padding: 0 3px;
+    text-transform: uppercase;
 }
