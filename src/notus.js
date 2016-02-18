@@ -97,10 +97,11 @@
             case 'warning':
                 classList.push('notus-alert-warning');
                 break;
-            case 'none':
+            case 'custom':
+                classList.push('notus-alert-custom');
                 break;
             default:
-                classList.push('notus-alert-custom');
+                break;
         }
 
         classList.push('notus-material-light');
@@ -150,7 +151,7 @@
         closeEl.onclick = function(e) {
             var doRemove = false,
                 handlerReturnVal;
-                
+
             if (typeof config.closeHandler === 'function')
             {
                 handlerReturnVal = config.closeHandler.apply(this, arguments);
