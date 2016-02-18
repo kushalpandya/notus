@@ -161,12 +161,13 @@
 
 
 /**** Material Light ****/
-.notus.notus-type-popup.notus-material-light {
+.notus.notus-type-popup.notus-material-light:not(.notus-type-snackbar) {
     width: 300px;
     min-height: 100px;
     padding: 8px;
     color: #333;
     background-color: white;
+    border: 1px solid transparent;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),
                 0 3px 1px -2px rgba(0,0,0,.2),
                 0 1px 5px 0 rgba(0,0,0,.12);
@@ -174,45 +175,57 @@
     border-radius: 2px;
 }
 
-.notus.notus-type-popup.notus-material-light .notus-content {
+.notus.notus-material-light:not(.notus-type-snackbar) .notus-content {
     max-width: 95%;
 }
 
-.notus.notus-type-popup.notus-material-light .notus-content .notus-content-title {
+.notus.notus-material-light:not(.notus-type-snackbar) .notus-content .notus-content-title {
     font-size: 16px;
     font-weight: 700;
 }
 
-.notus.notus-type-popup.notus-material-light.notus-alert-success .notus-content .notus-content-title {
+.notus.notus-material-light.notus-alert-success:not(.notus-type-snackbar) {
+    border: 1px solid #CAEFC5;
+}
+
+.notus.notus-material-light.notus-alert-failure:not(.notus-type-snackbar) {
+    border: 1px solid #FFB1B1;
+}
+
+.notus.notus-material-light.notus-alert-warning:not(.notus-type-snackbar) {
+    border: 1px solid #D1CC90;
+}
+
+.notus.notus-material-light.notus-alert-success:not(.notus-type-snackbar) .notus-content-title {
     color: #174f2d;
 }
 
-.notus.notus-type-popup.notus-material-light.notus-alert-failure .notus-content .notus-content-title {
+.notus.notus-material-light.notus-alert-failure:not(.notus-type-snackbar) .notus-content-title {
     color: #390000;
 }
 
-.notus.notus-type-popup.notus-material-light.notus-alert-warning .notus-content .notus-content-title {
+.notus.notus-material-light.notus-alert-warning:not(.notus-type-snackbar) .notus-content-title {
     color: #1a1800;
 }
 
-.notus.notus-type-popup.notus-material-light .notus-content .notus-content-body {
+.notus.notus-material-light:not(.notus-type-snackbar) .notus-content-body {
     margin-top: 5px;
     font-size: 12px;
 }
 
-.notus.notus-type-popup.notus-material-light.notus-alert-success .notus-content .notus-content-body {
+.notus.notus-material-light.notus-alert-success:not(.notus-type-snackbar) .notus-content-body {
     color: #227744;
 }
 
-.notus.notus-type-popup.notus-material-light.notus-alert-failure .notus-content .notus-content-body {
+.notus.notus-material-light.notus-alert-failure:not(.notus-type-snackbar) .notus-content-body {
     color: #6C0000;
 }
 
-.notus.notus-type-popup.notus-material-light.notus-alert-warning .notus-content .notus-content-body {
+.notus.notus-material-light.notus-alert-warning:not(.notus-type-snackbar) .notus-content-body {
     color: #4D4700;
 }
 
-.notus.notus-type-popup.notus-material-light .notus-close {
+.notus.notus-material-light:not(.notus-type-snackbar) .notus-close {
     position: absolute;
     top: 0;
     right: 0;
@@ -222,11 +235,11 @@
     cursor: pointer;
 }
 
-.notus.notus-type-popup.notus-material-light .notus-close:hover {
+.notus.notus-material-light:not(.notus-type-snackbar) .notus-close:hover {
     background-color: #EDEDED;
 }
 
-.notus.notus-type-popup.notus-material-light .notus-close .icon-close {
+.notus.notus-material-light:not(.notus-type-snackbar) .icon-close {
     font-size: 1.5em;
     line-height: 10px;
 }
