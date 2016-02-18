@@ -20,6 +20,7 @@
         fnCreateNotusContainer,
         fnGetAnimatorStyle,
         fnBindCloseHandler,
+        fnBindActionHandler,
         fnCreateNotusEl;
 
     /**
@@ -145,8 +146,7 @@
     };
 
     fnBindCloseHandler = function(config, notusEl) {
-        var type = config.notusType,
-            closeEl = notusEl.querySelector('.notus-close');
+        var closeEl = notusEl.querySelector('.notus-close');
 
         closeEl.onclick = function(e) {
             var doRemove = false,
@@ -163,6 +163,20 @@
             if (doRemove)
                 notusEl.remove();
         };
+    };
+
+    fnBindActionHandler = function(config, notusEl) {
+        var actionEl = notusEl.querySelector('.notus-action');
+
+        if (typeof config.actionHandler === 'function')
+        {
+            actionEl.onclick = function(e) {
+                config.actionHandler.apply(this, arguments);
+                notusEl.remove();
+            };
+        }
+        else
+            throw new Error("actionHandler is not a function");
     };
 
     fnGetAnimatorStyle = function(config) {
@@ -185,6 +199,7 @@
             classList = [],
             notusElTpl = '',
             notusTitleElTpl = '',
+            actionElTpl = '',
             closeElTpl = '';
 
         classList = fnGetParentClassList(config);
@@ -208,7 +223,18 @@
             ].join('');
         }
 
-        if (config.notusType !== 'snackbar')
+        if (config.notusType === 'snackbar')
+        {
+            if (config.actionable)
+            {
+                actionElTpl = [
+                    '<div class="notus-body-item notus-action">',
+                        '<span class="icon-action">{2}</span>',
+                    '</div>'
+                ].join('');
+            }
+        }
+        else
             notusTitleElTpl = '<div class="notus-content-title">{0}</div>';
 
         notusElTpl = [
@@ -218,10 +244,15 @@
                     '{1}',
                 '</div>',
             '</div>',
-            closeElTpl
+            closeElTpl,
+            actionElTpl
         ].join('');
 
-        parentDiv.innerHTML = _n.format(notusElTpl, config.title, config.message);
+        parentDiv.innerHTML = _n.format(notusElTpl,
+                                    config.title,
+                                    config.message,
+                                    config.actionText
+                                );
 
         return parentDiv;
     };
@@ -276,6 +307,10 @@
 
             if (config.closable)
                 fnBindCloseHandler(config, notusEl);
+
+            if (config.notusType === 'snackbar' &&
+                config.actionable)
+                fnBindActionHandler(config, notusEl);
 
             if (config.notusPosition.indexOf('bottom') > -1)
                 containerEl.insertBefore(notusEl, containerEl.firstChild);
