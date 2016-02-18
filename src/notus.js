@@ -18,8 +18,10 @@
 
     var fnGetParentClassList,
         fnCreateNotusContainer,
-        fnGetAnimatorStyle,
+        fnGetEntryAnimatorStyle,
+        fnGetExitAnimatorStyle,
         fnBindCloseHandler,
+        fnBindCloseListener,
         fnBindActionHandler,
         fnCreateNotusEl;
 
@@ -70,6 +72,19 @@
             }
 
             return str;
+        },
+
+        /**
+         * Removes an Element from the DOM.
+         * This method uses el.remove() internally in supported browsers
+         * except for IE11, where it is using el.parent.removeChild().
+         * courtesy: MDN < https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove >
+         */
+        removeEl: function(el) {
+            if (typeof el.remove === 'function')
+                el.remove();
+            else if (el.parentElement)
+                el.parentElement.removeChild(el);
         }
     };
 
@@ -145,6 +160,31 @@
         return containerEl;
     };
 
+    fnBindCloseListener = function(config, notusEl) {
+        var type = config.notusType,
+            animationType = config.animationType;
+
+        setTimeout(function() {
+            notusEl.setAttribute('style', fnGetExitAnimatorStyle(config).join(';'));
+
+            if (animationType === 'slide')
+            {
+                notusEl.classList.remove('notus-slide-in');
+                notusEl.classList.add('notus-slide-out');
+            }
+            else
+            {
+                notusEl.classList.remove('notus-fade-in');
+                notusEl.classList.add('notus-fade-out');
+            }
+
+            setTimeout(function() {
+                _n.removeEl(notusEl);
+            }, config.animationDuration);
+
+        }, config.autoCloseDuration);
+    };
+
     fnBindCloseHandler = function(config, notusEl) {
         var closeEl = notusEl.querySelector('.notus-close');
 
@@ -161,7 +201,7 @@
                 doRemove = true;
 
             if (doRemove)
-                notusEl.remove();
+                _n.removeEl(notusEl);
         };
     };
 
@@ -172,18 +212,19 @@
         {
             actionEl.onclick = function(e) {
                 config.actionHandler.apply(this, arguments);
-                notusEl.remove();
+                _n.removeEl(notusEl);
             };
         }
         else
             throw new Error("actionHandler is not a function");
     };
 
-    fnGetAnimatorStyle = function(config) {
+    fnGetEntryAnimatorStyle = function(config) {
         var type = config.notusType,
             position = config.notusPosition,
             animationType = config.animationType,
             isSlide = animationType === 'slide',
+            animationDuration = config.animationDuration / 1000,
             animators = [];
 
         if (type === 'popup')
@@ -191,11 +232,44 @@
         else
             animators.push(isSlide ? 'transform: translateY(0%)' : 'opacity: 1');
 
+        if (animationDuration > 0)
+            animators.push(_n.format('animation-duration: {0}s', animationDuration));
+
+        return animators;
+    };
+
+    fnGetExitAnimatorStyle = function(config) {
+        var type = config.notusType,
+            position = config.notusPosition,
+            animationType = config.animationType,
+            isSlide = animationType === 'slide',
+            animationDuration = config.animationDuration / 1000,
+            animators = [];
+
+        if (type === 'popup')
+        {
+            if (position.indexOf('left') > -1)
+                animators.push(isSlide ? 'transform: translateX(-110%)' : 'opacity: 0');
+            else
+                animators.push(isSlide ? 'transform: translateX(110%)' : 'opacity: 0');
+        }
+        else
+        {
+            if (position === 'top')
+                animators.push(isSlide ? 'transform: translateY(-110%)' : 'opacity: 0');
+            else
+                animators.push(isSlide ? 'transform: translateY(110%)' : 'opacity: 0');
+        }
+
+        if (animationDuration > 0)
+            animators.push(_n.format('animation-duration: {0}s', animationDuration));
+
         return animators;
     };
 
     fnCreateNotusEl = function(config) {
         var parentDiv = document.createElement('div'),
+            isSlide = config.animationType === 'slide',
             classList = [],
             notusElTpl = '',
             notusTitleElTpl = '',
@@ -206,9 +280,10 @@
 
         if (config.animate)
         {
-            classList.push(config.animationType === 'slide' ? 'notus-slide' : 'notus-fade');
+            classList.push(isSlide ? 'notus-slide' : 'notus-fade');
+            classList.push(isSlide ? 'notus-slide-in' : 'notus-fade-in');
 
-            parentDiv.setAttribute('style', fnGetAnimatorStyle(config).join(';'));
+            parentDiv.setAttribute('style', fnGetEntryAnimatorStyle(config).join(';'));
         }
 
         parentDiv.setAttribute('id', _n.genId());
@@ -280,7 +355,9 @@
 
             animate: true,                          /* Animate while showing/hiding Notus */
 
-            animationType: 'slide'                  /* Animation Type while showing/hiding Notus; it can be 'slide' or 'fade' */
+            animationType: 'slide',                 /* Animation Type while showing/hiding Notus; it can be 'slide' or 'fade' */
+
+            animationDuration: 300                  /* Animation Duration to apply while showing/hiding Notus, it is then passed to CSS animation-duration */
         };
 
         userConfig = _n.extend(defaultConfig, userConfig);
@@ -316,6 +393,9 @@
                 containerEl.insertBefore(notusEl, containerEl.firstChild);
             else
                 containerEl.appendChild(notusEl);
+
+            if (config.autoClose)
+                fnBindCloseListener(config, notusEl);
 
             return notusEl.getAttribute('id');
         };
