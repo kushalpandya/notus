@@ -11,31 +11,49 @@
 
 @keyframes slide-in-right {
     0% {
-        transform: translateX(100%);
+        transform: translateX(110%);
     }
 }
 
 @keyframes slide-in-left {
     0% {
-        transform: translateX(-100%);
+        transform: translateX(-110%);
     }
 }
 
 @keyframes slide-in-top {
     0% {
-        transform: translateY(-100%);
+        transform: translateY(-110%);
     }
 }
 
 @keyframes slide-in-bottom {
     0% {
-        transform: translateY(100%);
+        transform: translateY(110%);
+    }
+}
+
+@keyframes slide-out-lr {
+    0% {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes slide-out-tb {
+    0% {
+        transform: translateY(0%);
     }
 }
 
 @keyframes fade-in {
     0% {
         opacity: 0;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
     }
 }
 
@@ -121,34 +139,50 @@
 }
 
 /* Slide-in for Popup */
-.notus-position-tr .notus-type-popup.notus-slide,
-.notus-position-br .notus-type-popup.notus-slide {
+.notus-position-tr .notus-type-popup.notus-slide.notus-slide-in,
+.notus-position-br .notus-type-popup.notus-slide.notus-slide-in {
     animation-name: slide-in-right;
 }
 
-.notus-position-tl .notus-type-popup.notus-slide,
-.notus-position-bl .notus-type-popup.notus-slide {
+.notus-position-tl .notus-type-popup.notus-slide.notus-slide-in,
+.notus-position-bl .notus-type-popup.notus-slide.notus-slide-in {
     animation-name: slide-in-left;
 }
 
 /* Slide-in for Toast / Snackbar */
-.notus-position-top .notus-type-toast.notus-slide,
-.notus-position-top .notus-type-snackbar.notus-slide {
+.notus-position-top .notus-type-toast.notus-slide.notus-slide-in,
+.notus-position-top .notus-type-snackbar.notus-slide.notus-slide-in {
     animation-name: slide-in-top;
 }
 
-.notus-position-bottom .notus-type-toast.notus-slide,
-.notus-position-bottom .notus-type-snackbar.notus-slide {
+.notus-position-bottom .notus-type-toast.notus-slide.notus-slide-in,
+.notus-position-bottom .notus-type-snackbar.notus-slide.notus-slide-in {
     animation-name: slide-in-bottom;
 }
 
 /* Fade-in for Popup / Toast / Snackbar */
-.notus-type-popup.notus-fade,
-.notus-type-toast.notus-fade,
-.notus-type-snackbar.notus-fade {
-    animation-name: fade-in;
+.notus.notus-fade {
     animation-duration:  .4s;
     animation-timing-function: ease-in-out;
+}
+
+.notus.notus-fade.notus-fade-in {
+    animation-name: fade-in;
+}
+
+/* Slide-out for Popup */
+.notus-type-popup.notus-slide.notus-slide-out {
+    animation-name: slide-out-lr;
+}
+
+.notus-type-toast.notus-slide.notus-slide-out,
+.notus-type-snackbar.notus-slide.notus-slide-out {
+    animation-name: slide-out-tb;
+}
+
+/* Fade-out for Popup / Toast / Snackbar */
+.notus.notus-fade.notus-fade-out {
+    animation-name: fade-out;
 }
 
 /*---------------- Notification Card Styles ----------------*/
