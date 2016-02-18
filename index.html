@@ -116,7 +116,6 @@
                             <th><i class="glyphicon glyphicon-move"></i> Position</th>
                             <th><i class="glyphicon glyphicon-warning-sign"></i> Alert Type</th>
                             <th><i class="glyphicon glyphicon-flash"></i> Actions</th>
-                            <th><i class="glyphicon glyphicon-play-circle"></i> Animate</th>
                             <th><i class="glyphicon glyphicon-dashboard"></i> Animation Type</th>
                         </tr>
                         <tr>
@@ -141,14 +140,6 @@
                                     <label>
                                         <input type="checkbox" name="closable" checked="checked">
                                         Closable
-                                    </label>
-                                </div>
-                            </td>
-                            <td rowspan="6">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="animate" checked="checked">
-                                        Animate
                                     </label>
                                 </div>
                             </td>
@@ -178,11 +169,11 @@
                                     </label>
                                 </div>
                             </td>
-                            <td rowspan="6">
+                            <td>
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" name="actionable">
-                                        Actionable
+                                        <input type="checkbox" name="autoClose" checked="checked">
+                                        Auto-close
                                     </label>
                                 </div>
                             </td>
@@ -212,6 +203,14 @@
                                     </label>
                                 </div>
                             </td>
+                            <td>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="animate" checked="checked">
+                                        Animate
+                                    </label>
+                                </div>
+                            </td>
                         </tr>
                         <tr colspan="4">
                             <td>
@@ -227,6 +226,14 @@
                                     <label>
                                         <input type="radio" name="alertType" value="warning">
                                         Warning
+                                    </label>
+                                </div>
+                            </td>
+                            <td  rowspan="3">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="actionable">
+                                        Actionable
                                     </label>
                                 </div>
                             </td>
@@ -375,11 +382,13 @@
                     title: document.getElementById('notusTitle').value,
                     message: document.getElementById('notusMessage').value,
                     closable: document.querySelector('input[type="checkbox"][name="closable"]').checked,
+                    autoClose: document.querySelector('input[type="checkbox"][name="autoClose"]').checked,
                     notusType: notusType,
                     notusPosition: notusPosition,
                     alertType: alertType,
                     animate: document.querySelector('input[type="checkbox"][name="animate"]').checked,
-                    animationType: animationType
+                    animationType: animationType,
+                    animationDuration: 300
                 };
 
                 if (notusType === 'snackbar')
