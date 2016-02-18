@@ -115,7 +115,7 @@
                         <tr>
                             <th><i class="glyphicon glyphicon-move"></i> Position</th>
                             <th><i class="glyphicon glyphicon-warning-sign"></i> Alert Type</th>
-                            <th><i class="glyphicon glyphicon-remove-sign"></i> Closable</th>
+                            <th><i class="glyphicon glyphicon-flash"></i> Actions</th>
                             <th><i class="glyphicon glyphicon-play-circle"></i> Animate</th>
                             <th><i class="glyphicon glyphicon-dashboard"></i> Animation Type</th>
                         </tr>
@@ -136,7 +136,7 @@
                                     </label>
                                 </div>
                             </td>
-                            <td rowspan="6">
+                            <td>
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" name="closable" checked="checked">
@@ -175,6 +175,14 @@
                                     <label>
                                         <input type="radio" name="alertType" value="success">
                                         Success
+                                    </label>
+                                </div>
+                            </td>
+                            <td rowspan="6">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="actionable">
+                                        Actionable
                                     </label>
                                 </div>
                             </td>
@@ -266,6 +274,7 @@
         (function() {
             var btnNotify = document.getElementById('btnNotify'),
                 cbAnimate = document.querySelector('input[type="checkbox"][name="animate"]'),
+                cbActionable = document.querySelector('input[type="checkbox"][name="actionable"]'),
                 rdNotusType = document.querySelectorAll('input[type="radio"][name="notusType"]'),
                 rdNotusPosition = document.querySelectorAll('input[type="radio"][name="notusPosition"]'),
                 rdAlertType = document.querySelectorAll('input[type="radio"][name="alertType"]'),
@@ -300,12 +309,22 @@
                         else
                         {
                             supportPositions[j].disabled = (supportPositions[j].dataset.supported === 'p');
-                            document.querySelectorAll('input[type="radio"][data-supported="ts"]')[0].checked = true;
-                            notusPosition = 'top';
+                            document.querySelectorAll('input[type="radio"][data-supported="ts"]')[(notusType === 'snackbar') ? 1 : 0].checked = true;
+                            notusPosition = (notusType === 'snackbar') ? 'bottom' : 'top';
                         }
                     }
 
-                    document.getElementById('notusTitle').disabled = (notusType === 'snackbar');
+                    if (notusType === 'snackbar')
+                    {
+                        document.getElementById('notusTitle').disabled = true;
+                        cbActionable.checked = true;
+                        cbActionable.disabled = false;
+                    }
+                    else
+                    {
+                        cbActionable.checked = false;
+                        cbActionable.disabled = true;
+                    }
                 };
             }
 
@@ -348,9 +367,12 @@
             };
 
             btnNotify.onclick = function(e) {
+                var myNotusConfig;
+
                 e.preventDefault();
-                myNotus.send({
-                    title: notusType !== 'snackbar' ? document.getElementById('notusTitle').value : undefined,
+
+                myNotusConfig = {
+                    title: document.getElementById('notusTitle').value,
                     message: document.getElementById('notusMessage').value,
                     closable: document.querySelector('input[type="checkbox"][name="closable"]').checked,
                     notusType: notusType,
@@ -358,7 +380,20 @@
                     alertType: alertType,
                     animate: document.querySelector('input[type="checkbox"][name="animate"]').checked,
                     animationType: animationType
-                });
+                };
+
+                if (notusType === 'snackbar')
+                {
+                    delete myNotusConfig.title;
+
+                    myNotusConfig['actionable'] = cbActionable.checked;
+                    myNotusConfig['actionText'] = 'UNDO';
+                    myNotusConfig['actionHandler'] = function(e) {
+                        alert('Your action was reverted!');
+                    };
+                }
+
+                myNotus.send(myNotusConfig);
             };
         })();
     </script>
