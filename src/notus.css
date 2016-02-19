@@ -191,42 +191,89 @@
     position: relative;
     box-sizing: border-box;
     margin: 10px auto;
-    pointer-events: all;
-}
-
-.notus .notus-close {
-    -webkit-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
-}
-
-
-/**** Material Light ****/
-.notus.notus-material-light {
     padding: 8px;
-    color: #333;
-    background-color: white;
-    border: 1px solid transparent;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),
                 0 3px 1px -2px rgba(0,0,0,.2),
                 0 1px 5px 0 rgba(0,0,0,.12);
 
     border-radius: 2px;
+    pointer-events: all;
 }
 
-.notus.notus-material-light .notus-close {
+.notus .notus-close {
     position: absolute;
     height: 20px;
     width: 20px;
     padding: 3px 4px;
     font-size: 1.5em;
     line-height: 15px;
+
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
 
-.notus.notus-material-light .notus-close,
-.notus.notus-material-light .notus-action {
+.notus .notus-close,
+.notus .notus-action {
     cursor: pointer;
+}
+
+.notus:not(.notus-type-snackbar) {
+    width: 300px;
+    min-height: 100px;
+}
+
+.notus:not(.notus-type-snackbar) .notus-content {
+    max-width: 95%;
+}
+
+.notus:not(.notus-type-snackbar) .notus-content-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.notus:not(.notus-type-snackbar) .notus-content-body {
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.notus:not(.notus-type-snackbar) .notus-close {
+    top: 0;
+    right: 0;
+}
+
+/** Styles for Snackbar **/
+
+.notus.notus-type-snackbar:after {
+    content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.notus.notus-type-snackbar .notus-close {
+    left: 5px;
+}
+
+.notus.notus-type-snackbar .notus-content {
+    float: left;
+    margin-left: 25px;
+}
+
+.notus.notus-type-snackbar .notus-action {
+    float: right;
+    padding: 0 3px;
+    text-transform: uppercase;
+}
+
+/*---------------- Material Light Theme ----------------*/
+
+.notus.notus-material-light {
+    color: #333;
+    background-color: white;
+    border: 1px solid transparent;
 }
 
 .notus.notus-material-light .notus-close:hover,
@@ -247,15 +294,15 @@
 }
 
 .notus.notus-material-light.notus-alert-success {
-    border: 1px solid #CAEFC5;
+    border-color: #CAEFC5;
 }
 
 .notus.notus-material-light.notus-alert-failure {
-    border: 1px solid #FFB1B1;
+    border-color: #FFB1B1;
 }
 
 .notus.notus-material-light.notus-alert-warning {
-    border: 1px solid #D1CC90;
+    border-color: #D1CC90;
 }
 
 .notus.notus-material-light.notus-alert-success .notus-content-title {
@@ -270,54 +317,6 @@
     color: #1a1800;
 }
 
-/** Common Styles for Popup & Toast **/
-
-.notus.notus-material-light:not(.notus-type-snackbar) {
-    width: 300px;
-    min-height: 100px;
-}
-
-.notus.notus-material-light:not(.notus-type-snackbar) .notus-content {
-    max-width: 95%;
-}
-
-.notus.notus-material-light:not(.notus-type-snackbar) .notus-content-title {
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.notus.notus-material-light:not(.notus-type-snackbar) .notus-content-body {
-    margin-top: 5px;
-    font-size: 12px;
-}
-
-.notus.notus-material-light:not(.notus-type-snackbar) .notus-close {
-    top: 0;
-    right: 0;
-}
-
-/** Styles for Snackbar **/
-
-.notus.notus-type-snackbar.notus-material-light:after {
-    content: ".";
-	display: block;
-	height: 0;
-	clear: both;
-	visibility: hidden;
-}
-
-.notus.notus-type-snackbar.notus-material-light .notus-close {
-    left: 5px;
-}
-
-.notus.notus-material-light.notus-type-snackbar .notus-content {
-    float: left;
-    margin-left: 25px;
-}
-
 .notus.notus-type-snackbar.notus-material-light .notus-action {
-    float: right;
     color: #777;
-    padding: 0 3px;
-    text-transform: uppercase;
 }
