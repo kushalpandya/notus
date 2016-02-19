@@ -197,6 +197,8 @@
                 0 1px 5px 0 rgba(0,0,0,.12);
 
     border-radius: 2px;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    font-size: 16px;
     pointer-events: all;
 }
 
@@ -205,7 +207,7 @@
     height: 20px;
     width: 20px;
     padding: 3px 4px;
-    font-size: 1.5em;
+    font-size: 2rem;
     line-height: 15px;
 
     -webkit-user-select: none;
@@ -214,9 +216,18 @@
             user-select: none;
 }
 
+.notus .notus-action {
+    font-size: 1.4rem;
+}
+
 .notus .notus-close,
 .notus .notus-action {
     cursor: pointer;
+    font-weight: 600;
+}
+
+.notus .notus-content-body {
+    font-size: 1.3rem;
 }
 
 .notus:not(.notus-type-snackbar) {
@@ -229,13 +240,12 @@
 }
 
 .notus:not(.notus-type-snackbar) .notus-content-title {
-    font-size: 16px;
+    font-size: 1.8rem;
     font-weight: 700;
 }
 
 .notus:not(.notus-type-snackbar) .notus-content-body {
     margin-top: 5px;
-    font-size: 12px;
 }
 
 .notus:not(.notus-type-snackbar) .notus-close {
@@ -259,7 +269,12 @@
 
 .notus.notus-type-snackbar .notus-content {
     float: left;
+    width: 85%;
     margin-left: 25px;
+}
+
+.notus.notus-type-snackbar .notus-content .notus-content-body {
+    line-height: 2.1rem;
 }
 
 .notus.notus-type-snackbar .notus-action {
@@ -270,53 +285,53 @@
 
 /*---------------- Material Light Theme ----------------*/
 
+.notus.notus-material-light .notus-content .notus-content-title,
+.notus.notus-type-snackbar.notus-material-light .notus-content .notus-content-body {
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.notus.notus-material-light .notus-close .icon-close,
+.notus.notus-type-snackbar.notus-material-light .notus-action,
+.notus.notus-material-light .notus-content .notus-content-body {
+    color: rgba(0, 0, 0, 0.54);
+}
+
 .notus.notus-material-light {
-    color: #333;
-    background-color: white;
-    border: 1px solid transparent;
+    background-color: #F5F5F5;
+    border: 1px solid #EEEEEE;
 }
 
 .notus.notus-material-light .notus-close:hover,
 .notus.notus-material-light .notus-action:hover {
-    background-color: #EDEDED;
-}
-
-.notus.notus-material-light.notus-alert-success .notus-content-body {
-    color: #227744;
-}
-
-.notus.notus-material-light.notus-alert-failure .notus-content-body {
-    color: #6C0000;
-}
-
-.notus.notus-material-light.notus-alert-warning .notus-content-body {
-    color: #4D4700;
+    background-color: #E0E0E0;
 }
 
 .notus.notus-material-light.notus-alert-success {
-    border-color: #CAEFC5;
+    background-color: #E8F5E9;
+    border-color: #C8E6C9;
+}
+
+.notus.notus-material-light.notus-alert-success .notus-close:hover,
+.notus.notus-material-light.notus-alert-success .notus-action:hover {
+    background-color: #C8E6C9;
 }
 
 .notus.notus-material-light.notus-alert-failure {
-    border-color: #FFB1B1;
+    background-color: #FFEBEE;
+    border-color: #FFCDD2;
+}
+
+.notus.notus-material-light.notus-alert-failure .notus-close:hover,
+.notus.notus-material-light.notus-alert-failure .notus-action:hover {
+    background-color: #FFCDD2;
 }
 
 .notus.notus-material-light.notus-alert-warning {
-    border-color: #D1CC90;
+    background-color: #FFF3E0;
+    border-color: #FFE0B2;
 }
 
-.notus.notus-material-light.notus-alert-success .notus-content-title {
-    color: #174f2d;
-}
-
-.notus.notus-material-light.notus-alert-failure .notus-content-title {
-    color: #390000;
-}
-
-.notus.notus-material-light.notus-alert-warning .notus-content-title {
-    color: #1a1800;
-}
-
-.notus.notus-type-snackbar.notus-material-light .notus-action {
-    color: #777;
+.notus.notus-material-light.notus-alert-warning .notus-close:hover,
+.notus.notus-material-light.notus-alert-warning .notus-action:hover {
+    background-color: #FFE0B2;
 }
