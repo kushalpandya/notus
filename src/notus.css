@@ -135,7 +135,7 @@
 .notus-type-toast.notus-slide,
 .notus-type-snackbar.notus-slide {
     animation-duration:  .2s;
-    animation-timing-function: ease-in-out;
+    animation-timing-function: ease-out;
 }
 
 /* Slide-in for Popup */
@@ -163,7 +163,7 @@
 /* Fade-in for Popup / Toast / Snackbar */
 .notus.notus-fade {
     animation-duration:  .4s;
-    animation-timing-function: ease-in-out;
+    animation-timing-function: ease-out;
 }
 
 .notus.notus-fade.notus-fade-in {
