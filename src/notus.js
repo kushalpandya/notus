@@ -224,8 +224,9 @@
         var type = config.notusType,
             position = config.notusPosition,
             animationType = config.animationType,
-            isSlide = animationType === 'slide',
+            animationFunction = config.animationFunction,
             animationDuration = config.animationDuration / 1000,
+            isSlide = animationType === 'slide',
             animators = [];
 
         if (type === 'popup')
@@ -236,6 +237,9 @@
         if (animationDuration > 0)
             animators.push(_n.format('animation-duration: {0}s', animationDuration));
 
+        if (animationFunction)
+            animators.push(_n.format('animation-timing-function: {0}', animationFunction));
+
         return animators;
     };
 
@@ -243,8 +247,9 @@
         var type = config.notusType,
             position = config.notusPosition,
             animationType = config.animationType,
-            isSlide = animationType === 'slide',
+            animationFunction = config.animationFunction,
             animationDuration = config.animationDuration / 1000,
+            isSlide = animationType === 'slide',
             animators = [];
 
         if (type === 'popup')
@@ -264,6 +269,9 @@
 
         if (animationDuration > 0)
             animators.push(_n.format('animation-duration: {0}s', animationDuration));
+
+        if (animationFunction)
+            animators.push(_n.format('animation-timing-function: {0}', animationFunction));
 
         return animators;
     };
@@ -358,7 +366,14 @@
 
             animationType: 'slide',                 /* Animation Type while showing/hiding Notus; it can be 'slide' or 'fade' */
 
-            animationDuration: 300,                 /* Animation Duration to apply while showing/hiding Notus, it is then passed to CSS animation-duration */
+            animationDuration: 300,                 /* Animation Duration to apply while showing/hiding Notus,
+                                                       it supports values in milliseconds.
+                                                       which is then passed to CSS animation-duration */
+
+            animationFunction: 'ease-out',          /* Animation Timing Function to use while showing/hiding Notus,
+                                                       it supports any value that CSS animation-timing-function supports,
+                                                       including cubic-bezier() & steps()
+                                                       value is then passed to CSS animation-timing-function */
 
             themeClass: 'notus-material-light'      /* Provide custom CSS class that you want to apply on Parent element of Notus */
         };
