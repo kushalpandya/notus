@@ -120,7 +120,8 @@
                 break;
         }
 
-        classList.push('notus-material-light');
+        if (config.themeClass)
+            classList.push(config.themeClass);
 
         return classList;
     };
@@ -357,7 +358,9 @@
 
             animationType: 'slide',                 /* Animation Type while showing/hiding Notus; it can be 'slide' or 'fade' */
 
-            animationDuration: 300                  /* Animation Duration to apply while showing/hiding Notus, it is then passed to CSS animation-duration */
+            animationDuration: 300,                 /* Animation Duration to apply while showing/hiding Notus, it is then passed to CSS animation-duration */
+
+            themeClass: 'notus-material-light'      /* Provide custom CSS class that you want to apply on Parent element of Notus */
         };
 
         userConfig = _n.extend(defaultConfig, userConfig);
