@@ -138,6 +138,9 @@
 
     /** Helpers Begin **/
 
+    /**
+     * Validate user configuration and throw Errors accordingly.
+     */
     fnValidateConfig = function(config) {
         if (notusTypeMap[config.notusType] === undefined)
             throw new Error('Unknown value for notusType');
