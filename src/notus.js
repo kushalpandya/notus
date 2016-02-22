@@ -16,6 +16,17 @@
         _n = {},
         notus;
 
+    var entityMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+        '/': '&#x2F;',
+        '`': '&#x60;',
+        '=': '&#x3D;'
+    };
+
     var fnGetParentClassList,
         fnCreateNotusContainer,
         fnGetEntryAnimatorStyle,
@@ -75,6 +86,16 @@
         },
 
         /**
+         * Escapes HTML tags present in the string.
+         * courtesy: Mustache.js < https://github.com/janl/mustache.js >
+         */
+        escapeHtml: function(string) {
+            return String(string).replace(/[&<>"'`=\/]/g, function fromEntityMap (s) {
+                return entityMap[s];
+            });
+        },
+
+        /**
          * Removes an Element from the DOM.
          * This method uses el.remove() internally in supported browsers
          * except for IE11, where it is using el.parent.removeChild().
@@ -88,14 +109,18 @@
         }
     };
 
+    /** Helpers Begin **/
+
     /**
-     * Helpers
+     * Creates list of CSS classes which are to be applied main Notus element based on config.
      */
     fnGetParentClassList = function(config) {
         var classList = [],
             type = config.notusType,
             position = config.notusPosition,
             alertType = config.alertType;
+
+        classList.push('notus');
 
         if (type === 'popup')
             classList.push('notus-type-popup');
@@ -126,6 +151,11 @@
         return classList;
     };
 
+    /**
+     * Creates new (or returns existing) Notus container elements to house Notus for a particular position.
+     * Note that it creates containers for all position types that Notus supports, and it will return
+     * reference to an existing container if it was previously created.
+     */
     fnCreateNotusContainer = function(config) {
         var type = config.notusType,
             position = config.notusPosition,
@@ -161,6 +191,10 @@
         return containerEl;
     };
 
+    /**
+     * Binds Timer event on each Notus that has autoClose set to true.
+     * the timer waits for autoCloseDuration to finish before closing & destroying Notus.
+     */
     fnBindCloseListener = function(config, notusEl) {
         var type = config.notusType,
             animationType = config.animationType;
@@ -186,6 +220,11 @@
         }, config.autoCloseDuration);
     };
 
+    /**
+     * Binds Mouse Click event handler on Close element of Notus.
+     * it optionally supports closeHandler function that gets called before Notus is destroyed.
+     * if closeHandler returns false (boolean false), Notus will be prevented from destroying.
+     */
     fnBindCloseHandler = function(config, notusEl) {
         var closeEl = notusEl.querySelector('.notus-close');
 
@@ -206,6 +245,9 @@
         };
     };
 
+    /**
+     * Binds Mouse Click event handler on action element of Notus type Snackbar.
+     */
     fnBindActionHandler = function(config, notusEl) {
         var actionEl = notusEl.querySelector('.notus-action');
 
@@ -220,6 +262,9 @@
             throw new Error("actionHandler is not a function");
     };
 
+    /**
+     * Updates and applies Entry Animation CSS styles and Classes of Notus Element based on config.
+     */
     fnGetEntryAnimatorStyle = function(config) {
         var type = config.notusType,
             position = config.notusPosition,
@@ -243,6 +288,9 @@
         return animators;
     };
 
+    /**
+     * Updates and applies Exit Animation CSS styles and Classes of Notus Element based on config.
+     */
     fnGetExitAnimatorStyle = function(config) {
         var type = config.notusType,
             position = config.notusPosition,
@@ -276,9 +324,13 @@
         return animators;
     };
 
+    /**
+     * Creates main Notus DOM Element based with provided config.
+     */
     fnCreateNotusEl = function(config) {
         var parentDiv = document.createElement('div'),
             isSlide = config.animationType === 'slide',
+            htmlStringSupported = config.htmlString,
             classList = [],
             notusElTpl = '',
             notusTitleElTpl = '',
@@ -296,7 +348,7 @@
         }
 
         parentDiv.setAttribute('id', _n.genId());
-        parentDiv.setAttribute('class', 'notus ' + classList.join(' '));
+        parentDiv.setAttribute('class', classList.join(' '));
 
         if (config.closable)
         {
@@ -309,7 +361,7 @@
 
         if (config.notusType === 'snackbar')
         {
-            if (config.actionable)
+            if (config.actionable) // actionable is only supported for Snackbar Notus.
             {
                 actionElTpl = [
                     '<div class="notus-body-item notus-action">',
@@ -333,13 +385,17 @@
         ].join('');
 
         parentDiv.innerHTML = _n.format(notusElTpl,
-                                    config.title,
-                                    config.message,
-                                    config.actionText
+                                    htmlStringSupported ? config.title : _n.escapeHtml(config.title),
+                                    htmlStringSupported ? config.message : _n.escapeHtml(config.message),
+                                    htmlStringSupported ? config.actionText : _n.escapeHtml(config.actionText)
                                 );
 
         return parentDiv;
     };
+
+    /** Helpers End **/
+
+    /** Main Notus Object Begin **/
 
     notus = self.notus = function(userConfig) {
         var bodyEL = document.body,
@@ -355,6 +411,9 @@
                                                        'toast' & 'snackbar' => 'top' or 'bottom' */
 
             alertType: 'none',                      /* Alert type can be; 'none', 'success', 'failure' or 'warning' */
+
+            htmlString: false,                      /* Enable HTML support in strings provided for 'title' & 'message',
+                                                       this is unsafe and hence, it is false by default */
 
             closable: true,                         /* Show close button to close Notus */
 
