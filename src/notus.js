@@ -16,18 +16,45 @@
         _n = {},
         notus;
 
-    var entityMap = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;',
-        '/': '&#x2F;',
-        '`': '&#x60;',
-        '=': '&#x3D;'
-    };
+    var htmlEntityMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '/': '&#x2F;',
+            '`': '&#x60;',
+            '=': '&#x3D;'
+        },
+        notusTypeMap = {
+            'popup': 'popup',
+            'toast': 'toast',
+            'snackbar': 'snackbar'
+        },
+        positionShorts = {
+            'top-left': 'tl',
+            'top-right': 'tr',
+            'bottom-left': 'bl',
+            'bottom-right': 'br',
+            'top': 'top',
+            'bottom': 'bottom',
+            'tl': 'tl',
+            'tr': 'tr',
+            'bl': 'bl',
+            'br': 'br',
+            't': 'top',
+            'b': 'bottom'
+        },
+        alertTypeMap = {
+            'success': 'success',
+            'failure': 'failure',
+            'warning': 'warning',
+            'custom': 'custom',
+            'none': ''
+        };
 
-    var fnGetParentClassList,
+    var fnValidateConfig,
+        fnGetParentClassList,
         fnCreateNotusContainer,
         fnGetEntryAnimatorStyle,
         fnGetExitAnimatorStyle,
@@ -91,7 +118,7 @@
          */
         escapeHtml: function(string) {
             return String(string).replace(/[&<>"'`=\/]/g, function fromEntityMap (s) {
-                return entityMap[s];
+                return htmlEntityMap[s];
             });
         },
 
@@ -111,39 +138,40 @@
 
     /** Helpers Begin **/
 
+    fnValidateConfig = function(config) {
+        if (notusTypeMap[config.notusType] === undefined)
+            throw new Error('Unknown value for notusType');
+
+        if (positionShorts[config.notusPosition] === undefined)
+            throw new Error('Unknown value for notusPosition');
+
+        if (alertTypeMap[config.alertType] === undefined)
+            throw new Error('Unknown value for alertType');
+
+        if (config.closeHandler &&
+            typeof config.closeHandler !== "function")
+            throw new Error("closeHandler is not a function");
+
+        if (config.notusType === 'snackbar' &&
+            config.actionable &&
+            typeof config.actionHandler !== "function")
+            throw new Error("actionHandler is not a function");
+    };
+
     /**
      * Creates list of CSS classes which are to be applied main Notus element based on config.
      */
     fnGetParentClassList = function(config) {
         var classList = [],
             type = config.notusType,
-            position = config.notusPosition,
             alertType = config.alertType;
 
         classList.push('notus');
 
-        if (type === 'popup')
-            classList.push('notus-type-popup');
-        else
-            classList.push(type === 'toast' ? 'notus-type-toast' : 'notus-type-snackbar');
+        classList.push('notus-type-' + notusTypeMap[type]);
 
-        switch (alertType)
-        {
-            case 'success':
-                classList.push('notus-alert-success');
-                break;
-            case 'failure':
-                classList.push('notus-alert-failure');
-                break;
-            case 'warning':
-                classList.push('notus-alert-warning');
-                break;
-            case 'custom':
-                classList.push('notus-alert-custom');
-                break;
-            default:
-                break;
-        }
+        if (alertTypeMap[alertType])
+            classList.push('notus-alert-' + alertTypeMap[alertType]);
 
         if (config.themeClass)
             classList.push(config.themeClass);
@@ -162,22 +190,10 @@
             containerCls = ['notus-container'],
             containerEl;
 
-        if (type === 'popup')
-        {
-            if (position === 'top-left')
-                containerCls.push('notus-position-tl');
-            else if (position === 'top-right')
-                containerCls.push('notus-position-tr');
-            else if (position === 'bottom-left')
-                containerCls.push('notus-position-bl');
-            else
-                containerCls.push('notus-position-br');
-        }
-        else
-        {
+        containerCls.push('notus-position-' + positionShorts[position]);
+
+        if (type !== 'popup')
             containerCls.push((type === 'toast') ? 'notus-container-toast' : 'notus-container-snackbar');
-            containerCls.push((position === 'top') ? 'notus-position-top' : 'notus-position-bottom');
-        }
 
         containerEl = document.querySelector('.' + containerCls.join('.'));
 
@@ -232,7 +248,7 @@
             var doRemove = false,
                 handlerReturnVal;
 
-            if (typeof config.closeHandler === 'function')
+            if (config.closeHandler)
             {
                 handlerReturnVal = config.closeHandler.apply(this, arguments);
                 doRemove = (typeof handlerReturnVal === 'boolean') ? handlerReturnVal : true;
@@ -251,15 +267,10 @@
     fnBindActionHandler = function(config, notusEl) {
         var actionEl = notusEl.querySelector('.notus-action');
 
-        if (typeof config.actionHandler === 'function')
-        {
-            actionEl.onclick = function(e) {
-                config.actionHandler.apply(this, arguments);
-                _n.removeEl(notusEl);
-            };
-        }
-        else
-            throw new Error("actionHandler is not a function");
+        actionEl.onclick = function(e) {
+            config.actionHandler.apply(this, arguments);
+            _n.removeEl(notusEl);
+        };
     };
 
     /**
@@ -267,7 +278,6 @@
      */
     fnGetEntryAnimatorStyle = function(config) {
         var type = config.notusType,
-            position = config.notusPosition,
             animationType = config.animationType,
             animationFunction = config.animationFunction,
             animationDuration = config.animationDuration / 1000,
@@ -302,14 +312,14 @@
 
         if (type === 'popup')
         {
-            if (position.indexOf('left') > -1)
+            if (positionShorts[position].indexOf('l') > -1)
                 animators.push(isSlide ? 'transform: translateX(-110%)' : 'opacity: 0');
             else
                 animators.push(isSlide ? 'transform: translateX(110%)' : 'opacity: 0');
         }
         else
         {
-            if (position === 'top')
+            if (positionShorts[position] === 'top')
                 animators.push(isSlide ? 'transform: translateY(-110%)' : 'opacity: 0');
             else
                 animators.push(isSlide ? 'transform: translateY(110%)' : 'opacity: 0');
@@ -407,8 +417,9 @@
             notusType: 'popup',                     /* Type can be anything from; 'popup', 'toast' or 'snackbar' */
 
             notusPosition: 'top-right',             /* Available positions for different notus types;
-                                                       'popup'              => 'top-left', 'bottom-left', 'top-right' or 'bottom-right'
-                                                       'toast' & 'snackbar' => 'top' or 'bottom' */
+                                                       'popup'              => 'top-left' ('tl'), 'bottom-left' ('bl'),
+                                                                               'top-right' ('tr') or 'bottom-right' ('br')
+                                                       'toast' & 'snackbar' => 'top' ('t') or 'bottom' ('b') */
 
             alertType: 'none',                      /* Alert type can be; 'none', 'success', 'failure' or 'warning' */
 
@@ -449,11 +460,16 @@
             return notus;
         };
 
+        /**
+         * Main Notus send() method to send supported type of notus Notifications.
+         */
         thisNotus.send = function(config) {
             var containerEl,
                 notusEl;
 
-            config = _n.extend(userConfig, config);
+            config = _n.extend({}, userConfig, config);
+
+            fnValidateConfig(config);
 
             containerEl = fnCreateNotusContainer(config);
 
