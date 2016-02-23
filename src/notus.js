@@ -45,6 +45,11 @@
             't': 'top',
             'b': 'bottom'
         },
+        positionForType = {
+            'popup': ['tl', 'tr', 'bl', 'br'],
+            'toast': ['t', 'b'],
+            'snackbar': ['t', 'b'],
+        },
         alertTypeMap = {
             'success': 'success',
             'failure': 'failure',
@@ -142,14 +147,20 @@
      * Validate user configuration and throw Errors accordingly.
      */
     fnValidateConfig = function(config) {
-        if (notusTypeMap[config.notusType] === undefined)
+        var type = config.notusType,
+            position = config.notusPosition;
+
+        if (notusTypeMap[type] === undefined)
             throw new Error('Unknown value for notusType');
 
-        if (positionShorts[config.notusPosition] === undefined)
+        if (positionShorts[position] === undefined)
             throw new Error('Unknown value for notusPosition');
 
         if (alertTypeMap[config.alertType] === undefined)
             throw new Error('Unknown value for alertType');
+
+        if (positionForType[type].indexOf(positionShorts[position]) < 0)
+            throw new Error('Unsupported position "' + position + '" for notusType "' + type + '"');
 
         if (config.closeHandler &&
             typeof config.closeHandler !== "function")
