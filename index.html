@@ -21,6 +21,14 @@
             text-align: center;
         }
 
+        .features .col-lg-6 {
+            min-height: 150px;
+        }
+
+        .features .col-lg-6 h4 span {
+            margin-left: 10px;
+        }
+
         .container .jumbotron.notus-demo-block,
         .jumbotron input[type="text"],
         .jumbotron textarea {
@@ -44,7 +52,9 @@
         }
 
         .footer {
+            min-height: 100px;
             margin-top: 20px;
+            padding-top: 10px;
             border-top: 1px solid #e5e5e5;
         }
 
@@ -68,7 +78,7 @@
 </head>
 <body>
     <a href="https://github.com/kushalpandya/notus" target="_blank">
-        <img style="position: absolute; top: 0; right: 0; border: 0;"
+        <img style="position: fixed; top: 0; right: 0; border: 0;"
              src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
              alt="Fork me on GitHub"
              data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
@@ -80,7 +90,7 @@
         </div>
         <div class="jumbotron notus-demo-block">
             <h2><b>Notus</b> - Web Notifications Widget</h2>
-            <p class="lead text-muted">Yet another pop-up notification library for the web, strictly without jQuery.</p>
+            <p class="lead text-muted">Yet another non-blocking pop-up notification library for the web, strictly <i>without</i> jQuery.</p>
             <div class="configure-notus">
                 <div class="form-group">
                     <label for="notusMessage">Title</label>
@@ -265,16 +275,33 @@
         </div>
         <div class="row features">
             <div class="col-lg-6">
-                <h4>Pure JavaScript</h4>
-                <p>There are ton of Notification widgets out there but they all depend on jQuery, Notus doesn't.</p>
+                <h4><i class="glyphicon glyphicon-ok-circle"></i><span>No Dependencies</span></h4>
+                <p>There are ton of Notification widgets out there but they either depend on jQuery or they are too heavy to include in your already large project, <b>Notus has no dependencies</b> and is super-small to blend in your existing project. Honourable mentions; <a href="https://notifyjs.com/" target="_blank">Notify.js</a> &amp; <a href="http://alertifyjs.com/notifier.html" target="_blank">AlertifyJS</a></p>
             </div>
             <div class="col-lg-6">
-                <h4>Full Flexible</h4>
-                <p>Notus is fully customizable and supports ton of ways to show notifications.</p>
+                <h4><i class="glyphicon glyphicon-leaf"></i><span>Light Weight</span></h4>
+                <p>Notus is less than 4 KB (2 KB for JS &amp; little over 1 KB for CSS) minified and gzipped.</p>
+            </div>
+            <div class="col-lg-6">
+                <h4><i class="glyphicon glyphicon-fullscreen"></i><span>Fully Flexible</span></h4>
+                <p>Notus is fully customizable and supports several ways to show notifications (Popup, Toast &amp; Snackbar) as well as custom styling using <code>themeClass</code> config.</p>
+            </div>
+            <div class="col-lg-6">
+                <h4><i class="glyphicon glyphicon-send"></i><span>Pure CSS3 Animations</span></h4>
+                <p>Notus provides basic Slide and Fade animations which are entirely CSS driven. It even allows custom easing function (with <code>animationFunction</code>) and animation duration (with <code>animationDuration</code>) in config.</p>
+            </div>
+            <div class="col-lg-6">
+                <h4><i class="glyphicon glyphicon-globe"></i><span>Works with Browsers &amp; NodeJS</span></h4>
+                <p>Notus supports web browsers as well as Desktop platforms like <a href="http://electron.atom.io/" target="_blank">Electron</a> or <a href="http://nwjs.io/" target="_blank">NW.js</a>.</p>
+            </div>
+            <div class="col-lg-6">
+                <h4><i class="glyphicon glyphicon-heart"></i><span>Latest Browser Support</span></h4>
+                <p>Notus supports latest Chrome, Firefox, Safari &amp; IE11+.</p>
             </div>
         </div>
         <footer class="footer">
-            <p><a href="https://doublslash.com/">Kushal Pandya</a></p>
+            <p class="pull-left"><a href="https://doublslash.com/" target="_blank">Kushal Pandya</a></p>
+            <p class="pull-right"><a href="https://raw.githubusercontent.com/kushalpandya/notus/master/LICENSE" target="_blank">MIT License</a></p>
         </footer>
     </div>
     <script type="text/javascript">
