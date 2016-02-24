@@ -88,6 +88,7 @@ Notus supports following options.
 ###Version Information
 ---
 * 0.1.0 - First Release.
+* 0.1.1 - Fixes for Toast & Snackbar.
 
 ###Author
 ---
