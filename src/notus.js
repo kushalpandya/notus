@@ -47,8 +47,8 @@
         },
         positionForType = {
             'popup': ['tl', 'tr', 'bl', 'br'],
-            'toast': ['t', 'b'],
-            'snackbar': ['t', 'b'],
+            'toast': ['top', 'bottom'],
+            'snackbar': ['top', 'bottom'],
         },
         alertTypeMap = {
             'success': 'success',
