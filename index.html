@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Notus - Better Popup Notifications</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="src/notus.css" media="screen" title="Notus Stylesheet" charset="utf-8">
+    <link rel="stylesheet" href="src/notus.css" charset="utf-8">
+    <link rel="stylesheet" href="src/animate.css" charset="utf-8">
     <script src="src/notus.js" charset="utf-8"></script>
     <style media="screen">
         body {
@@ -221,6 +222,14 @@
                                     </label>
                                 </div>
                             </td>
+                            <td>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="radio" name="animationType" value="custom">
+                                        Custom
+                                    </label>
+                                </div>
+                            </td>
                         </tr>
                         <tr colspan="4">
                             <td>
@@ -429,6 +438,15 @@
                     myNotusConfig['actionText'] = 'UNDO';
                     myNotusConfig['actionHandler'] = function(e) {
                         alert('Your action was reverted!');
+                    };
+                }
+
+                if (animationType === 'custom')
+                {
+                    myNotusConfig['animationClass'] = {
+                        fixed: 'animated',
+                        entry: 'flipInX',
+                        exit: 'flipOutX'
                     };
                 }
 
