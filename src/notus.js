@@ -56,6 +56,11 @@
             'warning': 'warning',
             'custom': 'custom',
             'none': ''
+        },
+        animationTypeMap = {
+            'slide': 'slide',
+            'fade': 'fade',
+            'custom': 'custom'
         };
 
     var fnValidateConfig,
@@ -159,6 +164,9 @@
         if (alertTypeMap[config.alertType] === undefined)
             throw new Error('Unknown value for alertType');
 
+        if (animationTypeMap[config.animationType] === undefined)
+            throw new Error('Unknown value for animationType');
+
         if (positionForType[type].indexOf(positionShorts[position]) < 0)
             throw new Error('Unsupported position "' + position + '" for notusType "' + type + '"');
 
@@ -227,20 +235,27 @@
      */
     fnBindCloseListener = function(config, notusEl) {
         var type = config.notusType,
-            animationType = config.animationType;
+            animationType = config.animationType,
+            animationClass = config.animationClass;
 
         setTimeout(function() {
             notusEl.setAttribute('style', fnGetExitAnimatorStyle(config).join(';'));
+
 
             if (animationType === 'slide')
             {
                 notusEl.classList.remove('notus-slide-in');
                 notusEl.classList.add('notus-slide-out');
             }
-            else
+            else if (animationType === 'fade')
             {
                 notusEl.classList.remove('notus-fade-in');
                 notusEl.classList.add('notus-fade-out');
+            }
+            else
+            {
+                notusEl.classList.remove(animationClass.extry);
+                notusEl.classList.add(animationClass.exit);
             }
 
             setTimeout(function() {
@@ -298,16 +313,19 @@
             isSlide = animationType === 'slide',
             animators = [];
 
-        if (type === 'popup')
-            animators.push(isSlide ? 'transform: translateX(0%)' : 'opacity: 1');
-        else
-            animators.push(isSlide ? 'transform: translateY(0%)' : 'opacity: 1');
+        if (animationType !== 'custom')
+        {
+            if (type === 'popup')
+                animators.push(isSlide ? 'transform: translateX(0%)' : 'opacity: 1');
+            else
+                animators.push(isSlide ? 'transform: translateY(0%)' : 'opacity: 1');
+
+            if (animationFunction)
+                animators.push(_n.format('animation-timing-function: {0}', animationFunction));
+        }
 
         if (animationDuration > 0)
             animators.push(_n.format('animation-duration: {0}s', animationDuration));
-
-        if (animationFunction)
-            animators.push(_n.format('animation-timing-function: {0}', animationFunction));
 
         return animators;
     };
@@ -324,26 +342,29 @@
             isSlide = animationType === 'slide',
             animators = [];
 
-        if (type === 'popup')
+        if (animationType !== 'custom')
         {
-            if (positionShorts[position].indexOf('l') > -1)
-                animators.push(isSlide ? 'transform: translateX(-110%)' : 'opacity: 0');
+            if (type === 'popup')
+            {
+                if (positionShorts[position].indexOf('l') > -1)
+                    animators.push(isSlide ? 'transform: translateX(-110%)' : 'opacity: 0');
+                else
+                    animators.push(isSlide ? 'transform: translateX(110%)' : 'opacity: 0');
+            }
             else
-                animators.push(isSlide ? 'transform: translateX(110%)' : 'opacity: 0');
-        }
-        else
-        {
-            if (positionShorts[position] === 'top')
-                animators.push(isSlide ? 'transform: translateY(-110%)' : 'opacity: 0');
-            else
-                animators.push(isSlide ? 'transform: translateY(110%)' : 'opacity: 0');
+            {
+                if (positionShorts[position] === 'top')
+                    animators.push(isSlide ? 'transform: translateY(-110%)' : 'opacity: 0');
+                else
+                    animators.push(isSlide ? 'transform: translateY(110%)' : 'opacity: 0');
+            }
+
+            if (animationFunction)
+                animators.push(_n.format('animation-timing-function: {0}', animationFunction));
         }
 
         if (animationDuration > 0)
             animators.push(_n.format('animation-duration: {0}s', animationDuration));
-
-        if (animationFunction)
-            animators.push(_n.format('animation-timing-function: {0}', animationFunction));
 
         return animators;
     };
@@ -353,7 +374,9 @@
      */
     fnCreateNotusEl = function(config) {
         var parentDiv = document.createElement('div'),
-            isSlide = config.animationType === 'slide',
+            animationType = config.animationType,
+            animationClass = config.animationClass,
+            isSlide = animationType === 'slide',
             htmlStringSupported = config.htmlString,
             classList = [],
             notusElTpl = '',
@@ -365,8 +388,16 @@
 
         if (config.animate)
         {
-            classList.push(isSlide ? 'notus-slide' : 'notus-fade');
-            classList.push(isSlide ? 'notus-slide-in' : 'notus-fade-in');
+            if (animationType !== 'custom')
+            {
+                classList.push(isSlide ? 'notus-slide' : 'notus-fade');
+                classList.push(isSlide ? 'notus-slide-in' : 'notus-fade-in');
+            }
+            else
+            {
+                classList.push(animationClass.fixed);
+                classList.push(animationClass.entry);
+            }
 
             parentDiv.setAttribute('style', fnGetEntryAnimatorStyle(config).join(';'));
         }
@@ -448,7 +479,9 @@
 
             animate: true,                          /* Animate while showing/hiding Notus */
 
-            animationType: 'slide',                 /* Animation Type while showing/hiding Notus; it can be 'slide' or 'fade' */
+            animationType: 'slide',                 /* Animation Type while showing/hiding Notus; it can be 'slide', 'fade' or 'custom'
+                                                       Using 'custom' exposes an additional config animationClass which can be used
+                                                       to provide animations using animate.css < https://github.com/daneden/animate.css > */
 
             animationDuration: 300,                 /* Animation Duration to apply while showing/hiding Notus,
                                                        it supports values in milliseconds.
@@ -458,6 +491,16 @@
                                                        it supports any value that CSS animation-timing-function supports,
                                                        including cubic-bezier() & steps()
                                                        value is then passed to CSS animation-timing-function */
+
+            animationClass: {
+                fixed: '',
+                entry: '',
+                exit: ''
+            },                                      /* This config is only applicable if animationType is 'custom'
+                                                       Using this config, you can provide custom 'extry' & 'exit' classes to control
+                                                       animations (exit animation only occurs if Notus auto-closes itself)
+                                                       with this config, while providing 'fixed' (that stays applied always) class to control your overrides,
+                                                       you can also use external library like animate.css */
 
             themeClass: 'notus-material-light'      /* Provide custom CSS class that you want to apply on Parent element of Notus */
         };
