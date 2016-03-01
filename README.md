@@ -11,7 +11,7 @@ Notus is small, it doesn't rely on any external framework or library, its implem
 
 See the [project page](https://doublslash.com/notus/) for demo.
 
-###Usage
+###Configure
 ---
 Download the tarball and extract it, include `notus.js` and `notus.css` in your page `<head>`.
 ```html
@@ -22,7 +22,7 @@ Download the tarball and extract it, include `notus.js` and `notus.css` in your 
 	<title>Awesome Notifications</title>
 	...
 	...
-	<link rel="stylesheet" href="src/notus.css" media="screen" title="Notus Stylesheet" charset="utf-8">
+	<link rel="stylesheet" href="src/notus.css" media="screen" charset="utf-8">
 	<script type="text/javascript" src="src/notus.js"></script>
 </head>
 ```
@@ -51,10 +51,10 @@ Notus provides a single method `send()` which optionally accepts `config` map to
 ```javascript
 <script type="text/javascript">
 	myNotus.send({
-		notusType: 'popup',
-		notusPosition: 'top-left',
-		title: 'Notus Popup',
-		message: 'Hello from Notus!!'
+        notusType: 'popup',
+        notusPosition: 'top-left',
+        title: 'Notus Popup',
+        message: 'Hello from Notus!!'
 	});
 </script>
 ```
@@ -75,10 +75,81 @@ Notus supports following options.
 	 - `autoClose`: Whether to close notification automatically after certain duration. Default is `true`.
 	 - `autoCloseDuration`: Duration (in milliseconds) to wait before automatically closing the notification. Default is `3000`.
 	 - `animate`: Whether to show/hide notification with animation. Default is `true`.
-	 - `animationType`: Animation type to use while performing show/hide animation. Supported types are `slide` (default) and `fade`.
+	 - `animationType`: Animation type to use while performing show/hide animation. Supported types are `slide` (default), `fade` and `custom` (only available in >=`v0.2.0`).
 	 - `animationDuration`: Speed of animation in milliseconds. Default is `300`.
-	 - `animationFunction`: Value to pass to CSS `animation-timing-function` property. Value can be any valid value that original CSS property supports (including `cubic-bezier()` & `steps()`). Default is `ease-out`. See [MDN article](https://developer.mozilla.org/en/docs/Web/CSS/animation-timing-function) on this CSS property.
+	 - `animationFunction`: Value to pass to CSS `animation-timing-function` property. Value can be any valid value that original CSS property supports (including `cubic-bezier()` & `steps()`). Default is `ease-out`. See [MDN article](https://developer.mozilla.org/en/docs/Web/CSS/animation-timing-function) on this CSS property. **Note:** This config is ignored if you provide `animationType` as `custom`.
+	 - `animationClass`: If you have set `animationType` as `custom`, you can use this config to provide additional animation classes to have complete control on animations. This config is a map which supports following properties.
+		 - `fixed`: CSS class that you want Notus element to always have (useful in controlling overrides).
+		 - `entry`: CSS class to use while showing Notus.
+		 - `exit`: CSS class to use while hiding Notus (only if it auto-closes itself with `autoClose` set to `true`).
 	 - `themeClass`: CSS class to add to main notification element to apply custom styling. Default is `notus-material-light` which is built-in theme and is part of `notus.css` stylesheet. Note that providing value to this option will replace `notus-material-light` with your value instead of adding a new class.
+
+### Examples
+---
+- **Popup**: Showing Notus as a popup in bottom-right corner of screen.
+```javascript
+myNotus.send({
+        notusType: 'popup',
+        notusPosition: 'bottom-right',
+        title: 'Notus Popup',
+        message: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas!!'
+});
+```
+- **Calling a method on Close**: Providing `closeHandler` to call custom logic when Notus is closed by user.
+```javascript
+myNotus.send({
+        notusType: 'toast',
+        notusPosition: 'bottom',
+        title: 'Notus Popup',
+        message: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas!!',
+        closeHandler: function(e) {
+	        alert('Close was clicked on Notus');
+	        return false; // returning false will prevent notus from closing.
+        }
+});
+```
+- **Actionable Snackbar**: Providing `actionHandler` and `actionText` on Snackbar Notus to call a method on clicking action.
+```javascript
+myNotus.send({
+        notusType: 'snackbar',
+        notusPosition: 'bottom',
+        message: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas!!',
+        actionable: true,  // this is mandatory for making snackbar actionable.
+        actionText: 'undo',
+        actionHandler: function(e) {
+	        alert('Undo was clicked!');
+        }
+});
+```
+- **Custom Animations**: Providing custom animations using CSS. Starting `v0.2.0`, Notus fully supports custom animations that you define in your own CSS file, along with it, Notus is now also compatible with  [Animate.css](https://github.com/daneden/animate.css) to provide custom animations, you're just required to include `animate.css` (download it from project page) into your page as follows to use it (it is not part of notus);
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<title>Awesome Notifications</title>
+	...
+	...
+	<link rel="stylesheet" href="src/notus.css" media="screen" charset="utf-8">
+	<link rel="stylesheet" href="src/animate.css" media="screen" charset="utf-8">
+	<script type="text/javascript" src="src/notus.js"></script>
+</head>
+```
+Once included, use `animationType` as `custom` and provide values for `animationClass` as follows.
+```javascript
+myNotus.send({
+        notusType: 'toast',
+        notusPosition: 'bottom',
+        title: 'Notus Popup',
+        message: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas!!',
+        animationType: 'custom',
+        animationClass: {
+            fixed: 'animated', // This is part of animate.css, this class should always be present in element which will animate.
+            entry: 'flipInX', // Animation to use when Notus appears, see https://daneden.github.io/animate.css/ for more supported animations
+            exit: 'flipOutX' // Animation to use when Notus disappears (i.e. auto-closes), see https://daneden.github.io/animate.css/ for more supported animations
+        }
+});
+```
 
 ### Known Issues
 ---
@@ -87,8 +158,9 @@ Notus supports following options.
 
 ###Version Information
 ---
-* 0.1.0 - First Release.
-* 0.1.1 - Fixes for Toast & Snackbar.
+* [0.1.0](https://github.com/kushalpandya/notus/releases/tag/v0.1.0) - First Release.
+* [0.1.1](https://github.com/kushalpandya/notus/releases/tag/v0.1.1) - Fixes for Toast & Snackbar.
+* [0.2.0](https://github.com/kushalpandya/notus/releases/tag/v0.2.0) - Adds support for custom animations, compatible with awesome CSS animation library [Animate.css](https://github.com/daneden/animate.css).
 
 ###Author
 ---
