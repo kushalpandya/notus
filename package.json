@@ -1,7 +1,7 @@
 {
   "name": "notus",
-  "version": "0.2.0",
-  "description": "Yet another pop-up notification library for the web, strictly without jQuery.",
+  "version": "0.2.1",
+  "description": "Yet another pop-up notification library for the web, strictly without jQuery",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,0 +1,14 @@
+{
+  "name": "notus",
+  "version": "0.2.1",
+  "description": "Yet another pop-up notification library for the web, strictly without jQuery",
+  "homepage": "https://doublslash.com/notus/",
+  "license": "MIT",
+  "main": "./src/notus.js",
+  "keywords": [
+    "notify",
+    "popup",
+    "toast",
+    "snackbar"
+  ]
+}
