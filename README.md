@@ -27,9 +27,13 @@ Download the tarball and extract it, include `notus.js` and `notus.css` in your 
 </head>
 ```
 
-If you're in Node environment, you can install latest Notus release using using `npm`
-```javascript
-npm install notus --save
+Install latest Notus release using using `npm` or `bower`.
+```bash
+npm install -S notus
+```
+or
+```bash
+bower install notus
 ```
 
 
