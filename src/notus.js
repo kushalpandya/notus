@@ -174,10 +174,9 @@
             typeof config.closeHandler !== "function")
             throw new Error("closeHandler is not a function");
 
-        if (config.notusType === 'snackbar' &&
-            config.actionable &&
-            typeof config.actionHandler !== "function")
-            throw new Error("actionHandler is not a function");
+        if (config.actionable &&
+            (typeof config.primaryAction !== "object" && typeof config.secondaryAction !== "object"))
+            throw new Error("primaryAction or secondaryAction undefined for actionable notus");
     };
 
     /**
@@ -274,18 +273,12 @@
         var closeEl = notusEl.querySelector('.notus-close');
 
         closeEl.onclick = function(e) {
-            var doRemove = false,
-                handlerReturnVal;
+            var persist;
 
             if (config.closeHandler)
-            {
-                handlerReturnVal = config.closeHandler.apply(this, arguments);
-                doRemove = (typeof handlerReturnVal === 'boolean') ? handlerReturnVal : true;
-            }
-            else
-                doRemove = true;
+                persist = config.closeHandler.apply(this, arguments);
 
-            if (doRemove)
+            if (!persist)
                 _n.removeEl(notusEl);
         };
     };
@@ -294,12 +287,23 @@
      * Binds Mouse Click event handler on action element of Notus type Snackbar.
      */
     fnBindActionHandler = function(config, notusEl) {
-        var actionEl = notusEl.querySelector('.notus-action');
+        var primaryActionEl = notusEl.querySelector('.notus-actions > .action-item.action-primary'),
+            secondaryActionEl = notusEl.querySelector('.notus-actions > .action-item.action-secondary'),
+            getActionHandler;
 
-        actionEl.onclick = function(e) {
-            config.actionHandler.apply(this, arguments);
-            _n.removeEl(notusEl);
+        getActionHandler = function(actionConfig) {
+            return function(e) {
+                var persist = actionConfig.actionHandler.apply(this, arguments);
+                if (!persist)
+                    _n.removeEl(notusEl);
+            };
         };
+
+        if (primaryActionEl)
+            primaryActionEl.onclick = getActionHandler(config.primaryAction);
+
+        if (secondaryActionEl)
+            secondaryActionEl.onclick = getActionHandler(config.secondaryAction);
     };
 
     /**
@@ -381,6 +385,8 @@
             classList = [],
             notusElTpl = '',
             notusTitleElTpl = '',
+            primaryActionElTpl = '',
+            secondaryActionElTpl = '',
             actionElTpl = '',
             closeElTpl = '';
 
@@ -414,18 +420,23 @@
             ].join('');
         }
 
-        if (config.notusType === 'snackbar')
+        if (config.actionable)
         {
-            if (config.actionable) // actionable is only supported for Snackbar Notus.
-            {
-                actionElTpl = [
-                    '<div class="notus-body-item notus-action">',
-                        '<span class="icon-action">{2}</span>',
-                    '</div>'
-                ].join('');
-            }
+            if (config.primaryAction)
+                primaryActionElTpl = _n.format('<span class="action-item action-primary">{0}</span>', htmlStringSupported ? config.primaryAction.text : _n.escapeHtml(config.primaryAction.text));
+
+            if (config.secondaryAction)
+                secondaryActionElTpl = _n.format('<span class="action-item action-secondary">{0}</span>', htmlStringSupported ? config.secondaryAction.text : _n.escapeHtml(config.secondaryAction.text));
+
+            actionElTpl = [
+                '<div class="notus-body-item notus-actions">',
+                    primaryActionElTpl,
+                    secondaryActionElTpl,
+                '</div>'
+            ].join('');
         }
-        else
+
+        if (config.notusType !== 'snackbar')
             notusTitleElTpl = '<div class="notus-content-title">{0}</div>';
 
         notusElTpl = [
@@ -441,8 +452,7 @@
 
         parentDiv.innerHTML = _n.format(notusElTpl,
                                     htmlStringSupported ? config.title : _n.escapeHtml(config.title),
-                                    htmlStringSupported ? config.message : _n.escapeHtml(config.message),
-                                    htmlStringSupported ? config.actionText : _n.escapeHtml(config.actionText)
+                                    htmlStringSupported ? config.message : _n.escapeHtml(config.message)
                                 );
 
         return parentDiv;
@@ -468,7 +478,7 @@
 
             alertType: 'none',                      /* Alert type can be; 'none', 'success', 'failure' or 'warning' */
 
-            htmlString: false,                      /* Enable HTML support in strings provided for 'title' & 'message',
+            htmlString: false,                      /* Enable HTML support in strings provided for 'title', 'message' & 'text' within actions,
                                                        this is unsafe and hence, it is false by default */
 
             closable: true,                         /* Show close button to close Notus */
@@ -535,8 +545,7 @@
             if (config.closable)
                 fnBindCloseHandler(config, notusEl);
 
-            if (config.notusType === 'snackbar' &&
-                config.actionable)
+            if (config.actionable)
                 fnBindActionHandler(config, notusEl);
 
             if (config.notusPosition.indexOf('bottom') > -1)
