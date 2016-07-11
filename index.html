@@ -359,17 +359,7 @@
                         }
                     }
 
-                    if (notusType === 'snackbar')
-                    {
-                        document.getElementById('notusTitle').disabled = true;
-                        cbActionable.checked = true;
-                        cbActionable.disabled = false;
-                    }
-                    else
-                    {
-                        cbActionable.checked = false;
-                        cbActionable.disabled = true;
-                    }
+                    document.getElementById('notusTitle').disabled = (notusType === 'snackbar');
                 };
             }
 
@@ -427,18 +417,32 @@
                     alertType: alertType,
                     animate: document.querySelector('input[type="checkbox"][name="animate"]').checked,
                     animationType: animationType,
-                    animationDuration: 300
+                    animationDuration: 300,
+                    htmlString: true
+                };
+
+                myNotusConfig['actionable'] = cbActionable.checked;
+                myNotusConfig['primaryAction'] = {
+                    'text': '<span class="glyphicon glyphicon-share-alt"></span> Reply',
+                    'actionHandler': function(e) {
+                        alert('Primary action clicked!');
+                    }
+                };
+
+                myNotusConfig['secondaryAction'] = {
+                    'text': '<span class="glyphicon glyphicon-time"></span> Snooze',
+                    'actionHandler': function(e) {
+                        alert('Secondary action clicked!');
+                        return true;
+                    }
                 };
 
                 if (notusType === 'snackbar')
                 {
                     delete myNotusConfig.title;
 
-                    myNotusConfig['actionable'] = cbActionable.checked;
-                    myNotusConfig['actionText'] = 'UNDO';
-                    myNotusConfig['actionHandler'] = function(e) {
-                        alert('Your action was reverted!');
-                    };
+                    myNotusConfig['primaryAction'].text = 'CONFIRM';
+                    myNotusConfig['secondaryAction'].text = 'UNDO';
                 }
 
                 if (animationType === 'custom')
