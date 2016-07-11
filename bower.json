@@ -4,7 +4,22 @@
   "description": "Yet another pop-up notification library for the web, strictly without jQuery",
   "homepage": "https://doublslash.com/notus/",
   "license": "MIT",
-  "main": "./src/notus.js",
+  "main": [
+    "./src/notus.js",
+    "./src/notus.css"
+  ],
+  "authors": [
+    "Kushal Pandya <kushalspandya@gmail.com> (https://doublslash.com)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kushalpandya/notus.git"
+  },
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
   "keywords": [
     "notify",
     "popup",
