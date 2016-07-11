@@ -216,12 +216,12 @@
             user-select: none;
 }
 
-.notus .notus-action {
+.notus .notus-actions {
     font-size: 1.4rem;
 }
 
 .notus .notus-close,
-.notus .notus-action {
+.notus .notus-actions {
     cursor: pointer;
     font-weight: 600;
 }
@@ -251,6 +251,18 @@
 .notus:not(.notus-type-snackbar) .notus-close {
     top: 0;
     right: 0;
+}
+
+.notus:not(.notus-type-snackbar) .notus-actions {
+    margin-top: 3px;
+    padding-top: 3px;
+    font-size: 1.2rem;
+    border-top: 1px solid #E0E0E0;
+}
+
+.notus:not(.notus-type-snackbar) .notus-actions .action-item {
+    display: block;
+    padding: 6px 4px;
 }
 
 /** Styles for Snackbar **/
@@ -283,10 +295,17 @@
     line-height: 2.1rem;
 }
 
-.notus.notus-type-snackbar .notus-action {
+.notus.notus-type-snackbar .notus-actions {
     float: right;
     padding: 0 3px;
-    text-transform: uppercase;
+}
+
+.notus.notus-type-snackbar .notus-actions .action-item {
+    padding: 3px 4px;
+}
+
+.notus.notus-type-snackbar .notus-actions .action-item.action-secondary {
+    margin-left: 10px;
 }
 
 /*---------------- Material Light Theme ----------------*/
@@ -307,8 +326,12 @@
     border: 1px solid #EEEEEE;
 }
 
+.notus.notus-material-light .notus-actions {
+    border-color: #E0E0E0;
+}
+
 .notus.notus-material-light .notus-close:hover,
-.notus.notus-material-light .notus-action:hover {
+.notus.notus-material-light .notus-actions .action-item:hover {
     background-color: #E0E0E0;
 }
 
@@ -317,8 +340,12 @@
     border-color: #C8E6C9;
 }
 
+.notus.notus-material-light.notus-alert-success .notus-actions {
+    border-color: #C8E6C9;
+}
+
 .notus.notus-material-light.notus-alert-success .notus-close:hover,
-.notus.notus-material-light.notus-alert-success .notus-action:hover {
+.notus.notus-material-light.notus-alert-success .notus-actions .action-item:hover {
     background-color: #C8E6C9;
 }
 
@@ -327,8 +354,12 @@
     border-color: #FFCDD2;
 }
 
+.notus.notus-material-light.notus-alert-failure .notus-actions {
+    border-color: #FFCDD2;
+}
+
 .notus.notus-material-light.notus-alert-failure .notus-close:hover,
-.notus.notus-material-light.notus-alert-failure .notus-action:hover {
+.notus.notus-material-light.notus-alert-failure .notus-actions .action-item:hover {
     background-color: #FFCDD2;
 }
 
@@ -337,7 +368,11 @@
     border-color: #FFE0B2;
 }
 
+.notus.notus-material-light.notus-alert-warning .notus-actions {
+    border-color: #FFE0B2;
+}
+
 .notus.notus-material-light.notus-alert-warning .notus-close:hover,
-.notus.notus-material-light.notus-alert-warning .notus-action:hover {
+.notus.notus-material-light.notus-alert-warning .notus-actions .action-item:hover {
     background-color: #FFE0B2;
 }
