@@ -1,6 +1,10 @@
 Notus
 ======================
 
+[![NPM](https://nodei.co/npm/notus.png?compact=true)](https://npmjs.org/package/notus)
+<iframe src="//benschwarz.github.io/bower-badges/embed.html?pkgname=notus" width="160" height="32" allowtransparency="true" frameborder="0" scrolling="0"></iframe>
+
+
 Yet another non-blocking, pop-up notification library for the web, strictly without jQuery (or any other dependencies).
 
 ###Why?
