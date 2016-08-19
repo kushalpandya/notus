@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Notus - Better Popup Notifications</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="prism.css" charset="utf-8">
     <link rel="stylesheet" href="//cdn.rawgit.com/kushalpandya/notus/master/src/notus.css" charset="utf-8">
     <link rel="stylesheet" href="//cdn.rawgit.com/kushalpandya/notus/master/src/animate.css" charset="utf-8">
     <script src="//cdn.rawgit.com/kushalpandya/notus/master/src/notus.js" charset="utf-8"></script>
@@ -74,6 +75,14 @@
 
         .notus-options {
             margin-top: 15px;
+        }
+
+        .sample-config {
+            margin-bottom: 25px;
+        }
+
+        .sample-config pre {
+            height: 200px;
         }
     </style>
 </head>
@@ -280,7 +289,15 @@
                     </table>
                 </div>
             </div>
-            <p><button class="btn btn-lg btn-primary" id="btnNotify"><i class="glyphicon glyphicon-play"></i> Send Notification</button></p>
+            <h3>Configuration</h3>
+            <div class="sample-config"><pre><code id="example-source" class="language-javascript">{
+    title: "Notus",
+    message: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas!",
+    autoCloseDuration: 5000,
+    notusPosition: "top-left",
+    htmlString: true
+}</code></pre></div>
+            <p><button class="btn btn-lg btn-primary" id="btnNotify"><i class="glyphicon glyphicon-play"></i> Ping Notus!</button></p>
             <p>or</p>
             <p><a class="btn btn-lg btn-success" id="btnDownload" href="https://github.com/kushalpandya/notus/releases" target="_blank"><i class="glyphicon glyphicon-download-alt"></i> Download</a></p>
         </div>
@@ -315,148 +332,8 @@
             <p class="pull-right"><a href="https://raw.githubusercontent.com/kushalpandya/notus/master/LICENSE" target="_blank">MIT License</a></p>
         </footer>
     </div>
-    <script type="text/javascript">
-        (function() {
-            var btnNotify = document.getElementById('btnNotify'),
-                cbAnimate = document.querySelector('input[type="checkbox"][name="animate"]'),
-                cbActionable = document.querySelector('input[type="checkbox"][name="actionable"]'),
-                rdNotusType = document.querySelectorAll('input[type="radio"][name="notusType"]'),
-                rdNotusPosition = document.querySelectorAll('input[type="radio"][name="notusPosition"]'),
-                rdAlertType = document.querySelectorAll('input[type="radio"][name="alertType"]'),
-                rdAnimationType = document.querySelectorAll('input[type="radio"][name="animationType"]'),
-                myNotus = notus({ animate: false }),
-                notusType = "popup",
-                notusPosition = "top-left",
-                alertType = "none",
-                animationType = "slide",
-                count = 1,
-                i;
-
-            for (i = 0; i < rdNotusType.length; i++)
-            {
-                rdNotusType[i].onchange = function(e) {
-                    var supportPositions,
-                        j;
-
-                    if (this.checked)
-                        notusType = this.value;
-
-                    supportPositions = document.querySelectorAll('input[type="radio"][data-supported]');
-
-                    for (j = 0; j < supportPositions.length; j++)
-                    {
-                        if (notusType == 'popup')
-                        {
-                            supportPositions[j].disabled = (supportPositions[j].dataset.supported === 'ts');
-                            document.querySelectorAll('input[type="radio"][data-supported="p"]')[0].checked = true;
-                            notusPosition = 'top-left';
-                        }
-                        else
-                        {
-                            supportPositions[j].disabled = (supportPositions[j].dataset.supported === 'p');
-                            document.querySelectorAll('input[type="radio"][data-supported="ts"]')[(notusType === 'snackbar') ? 1 : 0].checked = true;
-                            notusPosition = (notusType === 'snackbar') ? 'bottom' : 'top';
-                        }
-                    }
-
-                    document.getElementById('notusTitle').disabled = (notusType === 'snackbar');
-                };
-            }
-
-            for (i = 0; i < rdNotusPosition.length; i++)
-            {
-                rdNotusPosition[i].onchange = function(e) {
-                    if (this.checked)
-                        notusPosition = this.value;
-                }
-            }
-
-            for (i = 0; i < rdAlertType.length; i++)
-            {
-                rdAlertType[i].onchange = function(e) {
-                    if (this.checked)
-                        alertType = this.value;
-                }
-            }
-
-            for (i = 0; i < rdAnimationType.length; i++)
-            {
-                rdAnimationType[i].onchange = function(e) {
-                    if (this.checked)
-                        animationType = this.value;
-                };
-            }
-
-            cbAnimate.onchange = function(e) {
-                for (i = 0; i < rdAnimationType.length; i++)
-                {
-                    rdAnimationType[i].checked = false;
-                    rdAnimationType[i].disabled = !this.checked;
-                }
-
-                if (this.checked)
-                {
-                    rdAnimationType[0].checked = true;
-                    animationType = "slide";
-                }
-            };
-
-            btnNotify.onclick = function(e) {
-                var myNotusConfig;
-
-                e.preventDefault();
-
-                myNotusConfig = {
-                    title: document.getElementById('notusTitle').value,
-                    message: document.getElementById('notusMessage').value,
-                    closable: document.querySelector('input[type="checkbox"][name="closable"]').checked,
-                    autoClose: document.querySelector('input[type="checkbox"][name="autoClose"]').checked,
-                    autoCloseDuration: 5000,
-                    notusType: notusType,
-                    notusPosition: notusPosition,
-                    alertType: alertType,
-                    animate: document.querySelector('input[type="checkbox"][name="animate"]').checked,
-                    animationType: animationType,
-                    animationDuration: 300,
-                    htmlString: true
-                };
-
-                myNotusConfig['actionable'] = cbActionable.checked;
-                myNotusConfig['primaryAction'] = {
-                    'text': '<span class="glyphicon glyphicon-share-alt"></span> Reply',
-                    'actionHandler': function(e) {
-                        alert('Primary action clicked!');
-                    }
-                };
-
-                myNotusConfig['secondaryAction'] = {
-                    'text': '<span class="glyphicon glyphicon-time"></span> Snooze',
-                    'actionHandler': function(e) {
-                        alert('Secondary action clicked!');
-                        return true;
-                    }
-                };
-
-                if (notusType === 'snackbar')
-                {
-                    delete myNotusConfig.title;
-
-                    myNotusConfig['primaryAction'].text = 'CONFIRM';
-                    myNotusConfig['secondaryAction'].text = 'UNDO';
-                }
-
-                if (animationType === 'custom')
-                {
-                    myNotusConfig['animationClass'] = {
-                        fixed: 'animated',
-                        entry: 'flipInX',
-                        exit: 'flipOutX'
-                    };
-                }
-
-                myNotus.send(myNotusConfig);
-            };
-        })();
-    </script>
+    <script src="prism.js" charset="utf-8"></script>
+    <script src="//cdn.rawgit.com/beautify-web/js-beautify/v1.6.3/js/lib/beautify.js" charset="utf-8"></script>
+    <script src="script.js" charset="utf-8"></script>
 </body>
 </html>
