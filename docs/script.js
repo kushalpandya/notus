@@ -22,10 +22,11 @@
         alertType = "none",
         animationType = "slide",
         count = 1,
-        sourceConfig,
+        generatedNotusConfig,
         fnExtend,
         fnRemoveDefaultConfig,
         fnGetSource,
+        fnGenerateNotusConfig,
         i;
 
     fnExtend = function() {
@@ -121,6 +122,62 @@
         return js_beautify(sourceConfig);
     };
 
+    fnGenerateNotusConfig = function() {
+        var notusConfig = {
+            title: document.getElementById('notusTitle').value,
+            message: document.getElementById('notusMessage').value,
+            closable: document.querySelector('input[type="checkbox"][name="closable"]').checked,
+            autoClose: document.querySelector('input[type="checkbox"][name="autoClose"]').checked,
+            autoCloseDuration: 5000,
+            notusType: notusType,
+            notusPosition: notusPosition,
+            alertType: alertType,
+            animate: document.querySelector('input[type="checkbox"][name="animate"]').checked,
+            animationType: animationType,
+            animationDuration: 300,
+            htmlString: true
+        };
+
+        notusConfig['actionable'] = cbActionable.checked;
+        notusConfig['primaryAction'] = {
+            'text': "<span class='glyphicon glyphicon-share-alt'></span> Reply",
+            'actionHandler': function(e) {
+                alert('Primary action clicked!');
+            }
+        };
+
+        notusConfig['secondaryAction'] = {
+            'text': "<span class='glyphicon glyphicon-time'></span> Snooze",
+            'actionHandler': function(e) {
+                alert('Secondary action clicked!');
+                return true;
+            }
+        };
+
+        if (notusType === 'snackbar')
+        {
+            delete notusConfig.title;
+
+            notusConfig['primaryAction'].text = 'CONFIRM';
+            notusConfig['secondaryAction'].text = 'UNDO';
+        }
+
+        if (animationType === 'custom')
+        {
+            notusConfig['animationClass'] = {
+                fixed: 'animated',
+                entry: 'flipInX',
+                exit: 'flipOutX'
+            };
+        }
+
+        fnRemoveDefaultConfig(notusConfig);
+        sourceEl.innerHTML = fnGetSource(notusConfig);
+        Prism.highlightElement(sourceEl);
+
+        return notusConfig;
+    };
+
     for (i = 0; i < rdNotusType.length; i++)
     {
         rdNotusType[i].onchange = function(e) {
@@ -149,6 +206,8 @@
             }
 
             document.getElementById('notusTitle').disabled = (notusType === 'snackbar');
+
+            generatedNotusConfig = fnGenerateNotusConfig();
         };
     }
 
@@ -157,6 +216,8 @@
         rdNotusPosition[i].onchange = function(e) {
             if (this.checked)
                 notusPosition = this.value;
+
+            generatedNotusConfig = fnGenerateNotusConfig();
         }
     }
 
@@ -165,6 +226,8 @@
         rdAlertType[i].onchange = function(e) {
             if (this.checked)
                 alertType = this.value;
+
+            generatedNotusConfig = fnGenerateNotusConfig();
         }
     }
 
@@ -173,6 +236,8 @@
         rdAnimationType[i].onchange = function(e) {
             if (this.checked)
                 animationType = this.value;
+
+            generatedNotusConfig = fnGenerateNotusConfig();
         };
     }
 
@@ -188,66 +253,12 @@
             rdAnimationType[0].checked = true;
             animationType = "slide";
         }
+
+        generatedNotusConfig = fnGenerateNotusConfig();
     };
 
     btnNotify.onclick = function(e) {
-        var myNotusConfig;
-
         e.preventDefault();
-
-        myNotusConfig = {
-            title: document.getElementById('notusTitle').value,
-            message: document.getElementById('notusMessage').value,
-            closable: document.querySelector('input[type="checkbox"][name="closable"]').checked,
-            autoClose: document.querySelector('input[type="checkbox"][name="autoClose"]').checked,
-            autoCloseDuration: 5000,
-            notusType: notusType,
-            notusPosition: notusPosition,
-            alertType: alertType,
-            animate: document.querySelector('input[type="checkbox"][name="animate"]').checked,
-            animationType: animationType,
-            animationDuration: 300,
-            htmlString: true
-        };
-
-        myNotusConfig['actionable'] = cbActionable.checked;
-        myNotusConfig['primaryAction'] = {
-            'text': "<span class='glyphicon glyphicon-share-alt'></span> Reply",
-            'actionHandler': function(e) {
-                alert('Primary action clicked!');
-            }
-        };
-
-        myNotusConfig['secondaryAction'] = {
-            'text': "<span class='glyphicon glyphicon-time'></span> Snooze",
-            'actionHandler': function(e) {
-                alert('Secondary action clicked!');
-                return true;
-            }
-        };
-
-        if (notusType === 'snackbar')
-        {
-            delete myNotusConfig.title;
-
-            myNotusConfig['primaryAction'].text = 'CONFIRM';
-            myNotusConfig['secondaryAction'].text = 'UNDO';
-        }
-
-        if (animationType === 'custom')
-        {
-            myNotusConfig['animationClass'] = {
-                fixed: 'animated',
-                entry: 'flipInX',
-                exit: 'flipOutX'
-            };
-        }
-
-        fnRemoveDefaultConfig(myNotusConfig);
-        sourceEl.innerHTML = fnGetSource(myNotusConfig);
-
-        myNotus.send(myNotusConfig);
-
-        Prism.highlightElement(sourceEl);
+        myNotus.send(generatedNotusConfig);
     };
 })();
