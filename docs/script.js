@@ -8,40 +8,47 @@
  */
 
 (function() {
-    var btnNotify = document.getElementById('btnNotify'),
+    var myNotus = notus(),
+
+        btnNotify = document.getElementById('btnNotify'),
         sourceEl = document.getElementById('example-source'),
+
+        cbClosable = document.querySelector('input[type="checkbox"][name="closable"]'),
+        cbAutoClose = document.querySelector('input[type="checkbox"][name="autoClose"]'),
         cbAnimate = document.querySelector('input[type="checkbox"][name="animate"]'),
         cbActionable = document.querySelector('input[type="checkbox"][name="actionable"]'),
+
         rdNotusType = document.querySelectorAll('input[type="radio"][name="notusType"]'),
         rdNotusPosition = document.querySelectorAll('input[type="radio"][name="notusPosition"]'),
         rdAlertType = document.querySelectorAll('input[type="radio"][name="alertType"]'),
         rdAnimationType = document.querySelectorAll('input[type="radio"][name="animationType"]'),
-        myNotus = notus(),
+
         notusType = "popup",
         notusPosition = "top-left",
         alertType = "none",
         animationType = "slide",
-        count = 1,
+        closable = true,
+        autoClose = true,
+        animate = true,
+        actionable = false,
+
         generatedNotusConfig,
-        fnExtend,
+        fnClone,
         fnRemoveDefaultConfig,
         fnGetSource,
         fnGenerateNotusConfig,
         i;
 
-    fnExtend = function() {
-        var key, i;
+    fnClone = function(obj) {
+        if (obj === null || typeof obj !== 'object')
+            return obj;
 
-        for (i = 1; i < arguments.length; i++)
-        {
-            for (key in arguments[i])
-            {
-                if (arguments[i].hasOwnProperty(key))
-                    arguments[0][key] = arguments[i][key];
-            }
-        }
+        var temp = obj.constructor();
 
-        return arguments[0];
+        for (var key in obj)
+            temp[key] = fnClone(obj[key]);
+
+        return temp;
     };
 
     fnRemoveDefaultConfig = function(config) {
@@ -83,7 +90,7 @@
     };
 
     fnGetSource = function(config) {
-        var copyConfig = fnExtend({}, config),
+        var copyConfig = fnClone(config),
             sourceConfig,
             primaryActionHandler = '',
             secondaryActionHandler = '',
@@ -126,13 +133,13 @@
         var notusConfig = {
             title: document.getElementById('notusTitle').value,
             message: document.getElementById('notusMessage').value,
-            closable: document.querySelector('input[type="checkbox"][name="closable"]').checked,
-            autoClose: document.querySelector('input[type="checkbox"][name="autoClose"]').checked,
+            closable: closable,
+            autoClose: autoClose,
             autoCloseDuration: 5000,
             notusType: notusType,
             notusPosition: notusPosition,
             alertType: alertType,
-            animate: document.querySelector('input[type="checkbox"][name="animate"]').checked,
+            animate: animate,
             animationType: animationType,
             animationDuration: 300,
             htmlString: true
@@ -241,6 +248,16 @@
         };
     }
 
+    cbClosable.onchange = function(e) {
+        closable = this.checked;
+        generatedNotusConfig = fnGenerateNotusConfig();
+    };
+
+    cbAutoClose.onchange = function(e) {
+        autoClose = this.checked;
+        generatedNotusConfig = fnGenerateNotusConfig();
+    };
+
     cbAnimate.onchange = function(e) {
         for (i = 0; i < rdAnimationType.length; i++)
         {
@@ -254,11 +271,21 @@
             animationType = "slide";
         }
 
+        animate = this.checked;
+        generatedNotusConfig = fnGenerateNotusConfig();
+    };
+
+    cbActionable.onchange = function(e) {
+        actionable = this.checked;
         generatedNotusConfig = fnGenerateNotusConfig();
     };
 
     btnNotify.onclick = function(e) {
         e.preventDefault();
+
+        if (!generatedNotusConfig)
+            generatedNotusConfig = fnGenerateNotusConfig();
+
         myNotus.send(generatedNotusConfig);
     };
 })();
