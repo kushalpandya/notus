@@ -76,7 +76,7 @@ Notus supports following options.
 	- `message`: Message text to be shown in notification.
 	- `closable`: Whether to show close button to close notification.
 	- `closeHandler`: Callback method to call when close button is clicked. By default, notification will be dismissed after callback is called and executed, but you can prevent notification from dismissing by returning `true` (or a _truthy_ value) from the callback.
-	- `actionable`: Notus supports actions on all notification types (starting `v0.3.0` to perform something when an action is clicked. Notus currently supports only two actions; **primary** & **secondary**. Default value for actionable is `false`. In case this property is set to `true`, you need to provide at least one of the available action types; `primaryAction` and/or `secondaryAction`.
+	- `actionable`: Notus supports actions on all notification types (starting `v0.3.0` to perform something when an action is clicked). Notus currently supports only two actions; **primary** & **secondary**. Default value for actionable is `false`. In case this property is set to `true`, you need to provide at least one of the available action types; `primaryAction` and/or `secondaryAction`.
 		- `primaryAction`/`secondaryAction`: This is an object containing following properties.
 			- `text`: Title of action, it supports markup in case `htmlString` is set to `true`.
 			- `actionHandler`: Callback function to invoke when action is clicked by user. By default, notification will be dismissed after callback is called and executed, but you can prevent notification from dismissing by returning `true` (or a _truthy_ value) from the callback.
