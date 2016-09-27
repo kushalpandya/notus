@@ -1,5 +1,5 @@
 /**
- * notus v0.1.0
+ * notus v0.3.1
  *
  * Author: Kushal Pandya <kushalspandya@gmail.com> (https://doublslash.com)
  * Date: 12 February, 2016
