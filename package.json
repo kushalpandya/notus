@@ -2,7 +2,8 @@
   "name": "notus",
   "version": "0.3.0",
   "description": "Yet another pop-up notification library for the web, strictly without jQuery",
-  "main": "index.html",
+  "main": "src/notus.js",
+  "typings": "src/notus.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
