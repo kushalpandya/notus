@@ -167,6 +167,9 @@
         if (animationTypeMap[config.animationType] === undefined)
             throw new Error('Unknown value for animationType');
 
+        if (config.message === undefined)
+            throw new Error('Unknown value for message');
+
         if (positionForType[type].indexOf(positionShorts[position]) < 0)
             throw new Error('Unsupported position "' + position + '" for notusType "' + type + '"');
 

@@ -40,7 +40,7 @@ declare namespace notus {
         /*
          * Message text to be shown in notification.
          */
-        message?: string;
+        message: string;
 
         /*
          * Show close button to close Notus
