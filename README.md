@@ -189,6 +189,8 @@ For those who are upgrading notus to [v0.3.0](https://github.com/kushalpandya/no
 * [0.2.0](https://github.com/kushalpandya/notus/releases/tag/v0.2.0) - Adds support for custom animations, compatible with awesome CSS animation library [Animate.css](https://github.com/daneden/animate.css).
 * [0.2.1](https://github.com/kushalpandya/notus/releases/tag/v0.2.1) - Added support for bower installation. Thanks to [@lossendae](https://github.com/lossendae).
 * [0.3.0](https://github.com/kushalpandya/notus/releases/tag/v0.3.0) - Added actionable support for all notus types.
+* [0.3.1](https://github.com/kushalpandya/notus/releases/tag/v0.3.1) - Added Typings for TypeScript support.
+* [0.3.2](https://github.com/kushalpandya/notus/releases/tag/v0.3.2) - Make `message` config mandatory for all supported notification types.
 
 ###Author
 ---
