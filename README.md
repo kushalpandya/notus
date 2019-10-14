@@ -13,7 +13,7 @@ I wanted simple notification JS library at my day-job which can be used to show 
 ### How Notus is different?
 Notus is small, it doesn't rely on any external framework or library, its implementation is rather very simple to understand (and tweak). It relies on modern web standards from core logic to the animations.
 
-See the [project page](https://doublslash.com/notus/) for demo.
+See the [project homepage](https://kushalpandya.github.io/notus/) for demo.
 
 ### Configure
 ---
